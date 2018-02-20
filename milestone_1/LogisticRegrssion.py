@@ -3,6 +3,8 @@
 Created on Tue Feb 20 13:43:26 2018
 
 @author: Nigel
+
+This file includes the code for CSE517A(spring 2018) : Milestone 1(Linear Classifier)
 """
 
 import pandas as pd
@@ -27,12 +29,20 @@ data = pd.read_csv(DATASET_PATH,names=data_features)
 
 train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],data[data_features[11]], train_size=0.7)
 
+# Multiclass Logistic Regression
+mul_lr = linear_model.LogisticRegression(fit_intercept=True, multi_class='multinomial', solver = 'newton-cg').fit(train_x, train_y)
+
+print('Multiclass Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_lr.predict(train_x))))
+print('Multiclass Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_lr.predict(test_x))))
+
 train_y[train_y<5] = 0
 train_y[train_y>=5] = 1
 test_y[test_y<5] = 0
 test_y[test_y>=5] = 1
 
+# Binary Classification Using Logistic Regression
 mul_lr = linear_model.LogisticRegression(fit_intercept=True).fit(train_x, train_y)
 
 print('Binary Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_lr.predict(train_x))))
 print('Binary Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_lr.predict(test_x))))
+
