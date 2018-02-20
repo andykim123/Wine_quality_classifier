@@ -23,12 +23,17 @@ from sklearn.model_selection import train_test_split
 #DATASET_PATH = sys.argv[1]
 
 
-DATASET_PATH = "/Users/Nigel/Desktop/Wash U/2018 Junior Spring/CSE 517a/Milestone Projects Local Repo/milestone_1/winequality-red.csv"
+DATASET_PATH_RED = "/Users/Nigel/Desktop/Wash U/2018 Junior Spring/CSE 517a/Milestone Projects Local Repo/milestone_1/winequality-red.csv"
+DATASET_PATH_WHITE = "/Users/Nigel/Desktop/Wash U/2018 Junior Spring/CSE 517a/Milestone Projects Local Repo/milestone_1/winequality-red.csv"
 data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"]
-data = pd.read_csv(DATASET_PATH,names=data_features)
+data_red = pd.read_csv(DATASET_PATH_RED,names=data_features)
+data_white = pd.read_csv(DATASET_PATH_RED,names=data_features)
 
-train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],data[data_features[11]], train_size=0.7)
+                                    ## Red Wine ##
 
+train_x, test_x, train_y, test_y = train_test_split(data_red[data_features[:10]],data_red[data_features[11]], train_size=0.7)
+
+print('-------------Red Wine Evaluation-------------')
 # Multiclass Logistic Regression
 mul_lr = linear_model.LogisticRegression(fit_intercept=True, multi_class='multinomial', solver = 'newton-cg').fit(train_x, train_y)
 
@@ -41,8 +46,29 @@ test_y[test_y<5] = 0
 test_y[test_y>=5] = 1
 
 # Binary Classification Using Logistic Regression
-mul_lr = linear_model.LogisticRegression(fit_intercept=True).fit(train_x, train_y)
+lr = linear_model.LogisticRegression(fit_intercept=True).fit(train_x, train_y)
 
-print('Binary Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_lr.predict(train_x))))
-print('Binary Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_lr.predict(test_x))))
+print('Binary Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, lr.predict(train_x))))
+print('Binary Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, lr.predict(test_x))))
 
+                                    ## White Wine ##
+
+train_x_w, test_x_w, train_y_w, test_y_w = train_test_split(data_white[data_features[:10]],data_white[data_features[11]], train_size=0.7)
+
+print('-------------White Wine Evaluation-------------')
+# Multiclass Logistic Regression
+mul_lr = linear_model.LogisticRegression(fit_intercept=True, multi_class='multinomial', solver = 'newton-cg').fit(train_x_w, train_y_w)
+
+print('Multiclass Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y_w, mul_lr.predict(train_x_w))))
+print('Multiclass Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y_w, mul_lr.predict(test_x_w))))
+
+train_y_w[train_y_w<5] = 0
+train_y_w[train_y_w>=5] = 1
+test_y_w[test_y_w<5] = 0
+test_y_w[test_y_w>=5] = 1
+
+# Binary Classification Using Logistic Regression
+lr = linear_model.LogisticRegression(fit_intercept=True).fit(train_x_w, train_y_w)
+
+print('Binary Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y_w, lr.predict(train_x_w))))
+print('Binary Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y_w, lr.predict(test_x_w))))
