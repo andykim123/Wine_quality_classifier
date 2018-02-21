@@ -18,6 +18,7 @@ def validate_cmdline_args(nargs, msg):
         print(msg)
         sys.exit(1)
 validate_cmdline_args(2,'Usage: python MultinomialLogRegression.py <DATASET_PATH>')
+
 #DATASET_PATH = "/Users/dohoonkim/Desktop/cse517a/ApplicationProject/winequality-red.csv"
 DATASET_PATH = sys.argv[1]
 data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"] #12
