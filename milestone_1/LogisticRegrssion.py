@@ -14,17 +14,17 @@ from sklearn import linear_model
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
 
-#def validate_cmdline_args(nargs, msg):
-#    if len(sys.argv) < nargs:
-#        print(msg)
-#        sys.exit(1)
-#validate_cmdline_args(2,'Usage: python MultinomialLogRegression.py <DATASET_PATH>')
-##DATASET_PATH = "/Users/dohoonkim/Desktop/cse517a/ApplicationProject/winequality-red.csv"
-#DATASET_PATH = sys.argv[1]
+def validate_cmdline_args(nargs, msg):
+    if len(sys.argv) < nargs:
+        print(msg)
+        sys.exit(1)
+validate_cmdline_args(3,'Usage: python LogisticRegression.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>')
+DATASET_PATH_RED = sys.argv[1]
+DATASET_PATH_WHITE = sys.argv[2]
 
 
-DATASET_PATH_RED = "/Users/Nigel/Desktop/Wash U/2018 Junior Spring/CSE 517a/Milestone Projects Local Repo/milestone_1/winequality-red.csv"
-DATASET_PATH_WHITE = "/Users/Nigel/Desktop/Wash U/2018 Junior Spring/CSE 517a/Milestone Projects Local Repo/milestone_1/winequality-red.csv"
+#DATASET_PATH_RED = "/Users/Nigel/Desktop/Wash U/2018 Junior Spring/CSE 517a/Milestone Projects Local Repo/milestone_1/winequality-red.csv"
+#DATASET_PATH_WHITE = "/Users/Nigel/Desktop/Wash U/2018 Junior Spring/CSE 517a/Milestone Projects Local Repo/milestone_1/winequality-red.csv"
 data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"]
 data_red = pd.read_csv(DATASET_PATH_RED,names=data_features)
 data_white = pd.read_csv(DATASET_PATH_RED,names=data_features)
