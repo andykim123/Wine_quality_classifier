@@ -22,7 +22,6 @@ validate_cmdline_args(3,'Usage: python LogisticRegression.py <DATASET_PATH_RED> 
 DATASET_PATH_RED = sys.argv[1]
 DATASET_PATH_WHITE = sys.argv[2]
 
-
 #DATASET_PATH_RED = "/Users/Nigel/Desktop/Wash U/2018 Junior Spring/CSE 517a/Milestone Projects Local Repo/milestone_1/winequality-red.csv"
 #DATASET_PATH_WHITE = "/Users/Nigel/Desktop/Wash U/2018 Junior Spring/CSE 517a/Milestone Projects Local Repo/milestone_1/winequality-red.csv"
 data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"]
