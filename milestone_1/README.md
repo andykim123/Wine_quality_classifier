@@ -1,8 +1,11 @@
 Milestone 1
 ===========
+
 WUSTL SP18 CSE517 Machine Learning  
 Application Project 
-The program takes two user inputs for dataset paths of red and white wine datasets.   
+The program takes two user inputs for dataset paths of red and white wine datasets. 
+
+
 ---
 ### Include files
 * __*MultinomialLogRegression.py*__ : Multiclass classification - used built-in function and newton-cg as solver
