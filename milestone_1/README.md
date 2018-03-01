@@ -27,7 +27,7 @@ The program takes two user inputs for dataset paths of red and white wine datase
 
 ### Resources used
 * [Scikit Learn](http://scikit-learn.org/stable/)
-* Wine Data set imported from [UCI data repository](http://archive.ics.uci.edu/ml/datasets.html)
+* "Wine Quality" dataset imported from [UCI data repository](http://archive.ics.uci.edu/ml/datasets.html)
 ### Authors:
 * Jae Sang Ha
 * Ryun Han
