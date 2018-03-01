@@ -4,6 +4,7 @@ import sys
 from sklearn import tree
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import AdaBoostClassifier
 
 
@@ -35,7 +36,7 @@ clf = clf.fit(train_x, train_y)
 
 print('Decision Tree Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf.predict(train_x))))
 print('Decision Tree Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf.predict(test_x))))
-
+print('CV-prediction error rate :: {}'.format(cross_val_score(clf, data_red[data_features[:10]], data_red[data_features[11]], cv=10)))
                                     ## White Wine ##
 print('-------------White Wine Evaluation-------------')
 
@@ -51,3 +52,4 @@ clf = clf.fit(train_x_w, train_y_w)
 
 print('Decision Tree Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y_w, clf.predict(train_x_w))))
 print('Decision Tree Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y_w, clf.predict(test_x_w))))
+print('CV-prediction error rate :: {}'.format(cross_val_score(clf, data_white[data_features[:10]], data_white[data_features[11]], cv=10)))

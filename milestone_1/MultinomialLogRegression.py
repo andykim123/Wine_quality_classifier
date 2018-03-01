@@ -11,6 +11,7 @@ import numpy as np
 import sys
 from sklearn import linear_model
 from sklearn import metrics
+from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
 
 def validate_cmdline_args(nargs, msg):
@@ -31,3 +32,4 @@ mul_lr = linear_model.LogisticRegression(multi_class='multinomial', solver='newt
 
 print('Multinomial Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_lr.predict(train_x))))
 print('Multinomial Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_lr.predict(test_x))))
+print('CV-prediction error rate :: {}'.format(cross_val_score(lr, data[data_features[:10]], data[data_features[11]], cv=10)))
