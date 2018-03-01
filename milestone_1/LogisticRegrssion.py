@@ -39,6 +39,7 @@ mul_lr = linear_model.LogisticRegression(fit_intercept=True, multi_class='multin
 
 print('Multiclass Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_lr.predict(train_x))))
 print('Multiclass Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_lr.predict(test_x))))
+print('CV-prediction error rate :: {}'.format(cross_val_score(mul_lr, data_red[data_features[:10]], data_red[data_features[11]], cv=10)))
 
 train_y[train_y<5] = 0
 train_y[train_y>=5] = 1
@@ -74,4 +75,4 @@ lr = linear_model.LogisticRegression(fit_intercept=True).fit(train_x_w, train_y_
 
 print('Binary Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y_w, lr.predict(train_x_w))))
 print('Binary Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y_w, lr.predict(test_x_w))))
-print('CV-prediction error rate :: {}'.format(cross_val_score(lr, data_red[data_features[:10]], data_red[data_features[11]], cv=10)))
+print('CV-prediction error rate :: {}'.format(cross_val_score(lr, data_white[data_features[:10]], data_white[data_features[11]], cv=10)))
