@@ -28,8 +28,9 @@ train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],dat
 
 lr = linear_model.LogisticRegression()
 lr.fit(train_x, train_y)
-mul_lr = linear_model.LogisticRegression(multi_class='multinomial', solver='newton-cg').fit(train_x, train_y)
+mul_lr = linear_model.LogisticRegression(multi_class='multinomial', solver='newton-cg')
+mul_lr_fit = mul_lr.fit(train_x, train_y)
 
-print('Multinomial Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_lr.predict(train_x))))
-print('Multinomial Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_lr.predict(test_x))))
+print('Multinomial Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_lr_fit.predict(train_x))))
+print('Multinomial Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_lr_fit.predict(test_x))))
 print('CV-prediction error rate :: {}'.format(cross_val_score(lr, data[data_features[:10]], data[data_features[11]], cv=10)))
