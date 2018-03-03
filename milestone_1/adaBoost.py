@@ -74,4 +74,4 @@ clf_bin_fit_w = clf.fit(train_x_w, train_y_w)
 
 print('Random Forest Decision Tree Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y_w, clf_bin_fit_w.predict(train_x_w))))
 print('Random Forest Decision Tree Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y_w, clf_bin_fit_w.predict(test_x_w))))
-print('CV-prediction error rate :: {}'.format(cross_val_score(clf,cv_x, cv_y, cv=10)))
+print('Binary CV-prediction error rate :: {}'.format(cross_val_score(clf,cv_x, cv_y, cv=10)))

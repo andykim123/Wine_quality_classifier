@@ -57,7 +57,7 @@ lr_fit = lr.fit(train_x,train_y)
 
 print('Binary Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, lr_fit.predict(train_x))))
 print('Binary Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, lr_fit.predict(test_x))))
-print('CV-prediction error rate :: {}'.format(cross_val_score(lr, cv_x, cv_y, cv=10)))
+print('Binary CV-prediction error rate :: {}'.format(cross_val_score(lr, cv_x, cv_y, cv=10)))
 
                                     ## White Wine ##
 
@@ -87,4 +87,4 @@ lr_fit = lr.fit(train_x_w, train_y_w)
 
 print('Binary Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y_w, lr_fit.predict(train_x_w))))
 print('Binary Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y_w, lr_fit.predict(test_x_w))))
-print('CV-prediction error rate :: {}'.format(cross_val_score(lr, cv_x, cv_y, cv=10)))
+print('Binary CV-prediction error rate :: {}'.format(cross_val_score(lr, cv_x, cv_y, cv=10)))
