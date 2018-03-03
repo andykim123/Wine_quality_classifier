@@ -29,8 +29,8 @@ train_x, test_x, train_y, test_y = train_test_split(data_red[data_features[:10]]
 
 clf_mult_fit = clf.fit(train_x,train_y)
 
-print('Random Forest Decision Tree Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf_mult_fit.predict(train_x))))
-print('Random Forest Decision Tree Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_mult_fit.predict(test_x))))
+print('Adaboost Decision Tree Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf_mult_fit.predict(train_x))))
+print('Adaboost Decision Tree Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_mult_fit.predict(test_x))))
 print('Multinomial CV-prediction error rate :: {}'.format(cross_val_score(clf, data_red[data_features[:10]], data_red[data_features[11]], cv=10)))
 
 
@@ -46,8 +46,8 @@ cv_y[cv_y>=5] = 1
 
 clf_bin_fit = clf.fit(train_x, train_y)
 
-print('Random Forest Decision Tree Binary Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf_bin_fit.predict(train_x))))
-print('Random Forest Decision Tree Binary Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_bin_fit.predict(test_x))))
+print('Adaboost Decision Tree Binary Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf_bin_fit.predict(train_x))))
+print('Adaboost Decision Tree Binary Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_bin_fit.predict(test_x))))
 print('Binary CV-prediction error rate :: {}'.format(cross_val_score(clf, cv_x, cv_y, cv=10)))
 
                                     ## White Wine ##
@@ -57,8 +57,8 @@ train_x_w, test_x_w, train_y_w, test_y_w = train_test_split(data_white[data_feat
 
 clf_mult_fit_w = clf.fit(train_x_w,train_y_w)
 
-print('Random Forest Decision Tree Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y_w, clf_mult_fit_w.predict(train_x_w))))
-print('Random Forest Decision Tree Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y_w, clf_mult_fit_w.predict(test_x_w))))
+print('Adaboost Decision Tree Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y_w, clf_mult_fit_w.predict(train_x_w))))
+print('Adaboost Decision Tree Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y_w, clf_mult_fit_w.predict(test_x_w))))
 print('Multinomial CV-prediction error rate :: {}'.format(cross_val_score(clf, data_white[data_features[:10]], data_white[data_features[11]], cv=10)))
 
 train_y_w[train_y_w<5] = 0
