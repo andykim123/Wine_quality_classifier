@@ -17,7 +17,7 @@ DATASET_PATH_WHITE = sys.argv[2]
 data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"]
 data_red = pd.read_csv(DATASET_PATH_RED,names=data_features)
 data_white = pd.read_csv(DATASET_PATH_RED,names=data_features)
-clf = svm.LinearSVC(kernel='rbf',gamma=2)
+clf = svm.SVC(kernel='rbf',gamma=2)
 
                                     ## Red Wine ##
 print('-------------Red Wine Evaluation-------------')
