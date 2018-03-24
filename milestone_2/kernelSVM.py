@@ -26,8 +26,8 @@ train_x, test_x, train_y, test_y = train_test_split(data_red[data_features[:10]]
 
 clf_red_fit = clf.fit(train_x,train_y)
 
-print('Decision Tree Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf_mult_fit.predict(train_x))))
-print('Decision Tree Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_mult_fit.predict(test_x))))
+print('Decision Tree Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, cl_red_fit.predict(train_x))))
+print('Decision Tree Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_red_fit.predict(test_x))))
 print('Multinomial CV-prediction error rate :: {}'.format(cross_val_score(clf, data_red[data_features[:10]], data_red[data_features[11]], cv=10)))
 
                                     ## White Wine ##
@@ -37,6 +37,6 @@ train_x_w, test_x_w, train_y_w, test_y_w = train_test_split(data_white[data_feat
 
 clf_white_fit = clf.fit(train_x_w,train_y_w)
 
-print('Decision Tree Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y_w, clf_mult_fit_w.predict(train_x_w))))
-print('Decision Tree Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y_w, clf_mult_fit_w.predict(test_x_w))))
+print('Decision Tree Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y_w, clf_white_fit_w.predict(train_x_w))))
+print('Decision Tree Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y_w, clf_white_fit_w.predict(test_x_w))))
 print('Multinomial CV-prediction error rate :: {}'.format(cross_val_score(clf, data_white[data_features[:10]], data_white[data_features[11]], cv=10)))
