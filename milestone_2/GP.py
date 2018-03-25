@@ -35,75 +35,79 @@ if len(sys.argv)==2:
     #DATASET_PATH = "/Users/dohoonkim/Desktop/cse517a/ApplicationProject/winequality-red.csv"
     DATASET_PATH = sys.argv[1]
     data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"] #12
-    data = pd.read_csv(DATASET_PATH,names=data_features)
-    train_x, test_x, train_y, test_y = train_test_split(data[data_features[1:11]],data["eval"], train_size=0.7)
+    data1 = pd.read_csv(DATASET_PATH,names=data_features)
+    train_x, test_x, train_y, test_y = train_test_split(data1[data_features[1:11]],data1["eval"], train_size=0.7)
+    print("\nSplitting... '%s' into Training set and Test set...\n" % DATASET_PATH[DATASET_PATH.rfind("/")+1: ])
 # When 3 arguments given: python GP.py <DATAPATH1> <DATAPATH2>,
 # DATAPATH1: training set, DATAPATH2: test set
 elif len(sys.argv)==3: 
-    DATASET_PATH = sys.argv[1]
+    DATASET_PATH1 = sys.argv[1]
     DATASET_PATH2 = sys.argv[2]
     data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"] #12
-    data1 = pd.read_csv(DATASET_PATH,names=data_features)
+    data1 = pd.read_csv(DATASET_PATH1,names=data_features)
     data2= pd.read_csv(DATASET_PATH2,names=data_features)
     train_x = data1[data_features[1:11]]
     test_x  = data2[data_features[1:11]]
     train_y = data1["eval"]
     test_y  = data2["eval"]
+    print("Training... '%s'\n" % DATASET_PATH1[DATASET_PATH1.rfind("/")+1: ])
+    print("Testing... '%s'\n" % DATASET_PATH2[DATASET_PATH2.rfind("/")+1: ])
+    
 # =============================================================================
  # GP with RBF Kernel
-print("");
+
  #Kernel’s hyperparameters are optimized during fitting.
-print("GP with RBF Kernel")
+print("\nGP with RBF Kernel\n")
 # Multiclass as One-vs-All
 mul_gp1 = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_rest').fit(train_x, train_y)
- 
-print('Multiclass (One-vs-All) Gaussian Process Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_gp1.predict(train_x))))
-print('Multiclass (One-vs-All) Gaussian Process Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_gp1.predict(test_x))))
-print("Computing CV...")
-cv_gp1 = cross_val_score(mul_gp1, data[data_features[:10]], data[data_features[11]], cv=10)
+
+print('Multiclass (One-vs-All) Gaussian Process Train Accuracy :: {}\n'.format(metrics.accuracy_score(train_y, mul_gp1.predict(train_x))))
+print('Multiclass (One-vs-All) Gaussian Process Test Accuracy :: {}\n'.format(metrics.accuracy_score(test_y, mul_gp1.predict(test_x))))
+print("Computing CV...\n")
+cv_gp1 = cross_val_score(mul_gp1, data1[data_features[1:11]], data1["eval"], cv=10)
 #print('CV-prediction error rate :: {}'.format(cv_gp1))
 #mean cv and the 95% confidence interval of the cv's estimate
-print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv_gp1.mean(), cv_gp1.std() * 2)) 
+print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp1.mean(), cv_gp1.std() * 2)) 
 
 # Multiclass as One-vs-One
 mul_gp2 = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_one').fit(train_x, train_y)
 
-print('Multiclass (One-vs-One) Gaussian Process Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_gp2.predict(train_x))))
-print('Multiclass (One-vs-One) Gaussian Process Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_gp2.predict(test_x))))
-print("Computing CV...")
-cv_gp2 = cross_val_score(mul_gp2, data[data_features[1:11]], data["eval"], cv=10)
+print('Multiclass (One-vs-One) Gaussian Process Train Accuracy :: {}\n'.format(metrics.accuracy_score(train_y, mul_gp2.predict(train_x))))
+print('Multiclass (One-vs-One) Gaussian Process Test Accuracy :: {}\n'.format(metrics.accuracy_score(test_y, mul_gp2.predict(test_x))))
+print("Computing CV...\n")
+cv_gp2 = cross_val_score(mul_gp2, data1[data_features[1:11]], data1["eval"], cv=10)
 #print('CV-prediction error rate :: {}'.format(cv_gp2))
 #mean cv and the 95% confidence interval of the cv's estimate
-print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv_gp2.mean(), cv_gp2.std() * 2))
+print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp2.mean(), cv_gp2.std() * 2))
 # =============================================================================
 
 
 # =============================================================================
  # GP with Matern Kernel
-print("")
-print("GP with Matern Kernel") #Kernel’s hyperparameters are optimized during fitting.
+
+print("\nGP with Matern Kernel\n") #Kernel’s hyperparameters are optimized during fitting.
 # Multiclass as One-vs-All
 mul_gp1 = gaussian_process.GaussianProcessClassifier(kernel=1.0 * Matern(length_scale=1.0, length_scale_bounds=(1e-1, 10.0),
                         nu=1.5), multi_class='one_vs_rest').fit(train_x, train_y)
 
-print('Multiclass (One-vs-All) Gaussian Process Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_gp1.predict(train_x))))
-print('Multiclass (One-vs-All) Gaussian Process Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_gp1.predict(test_x))))
-print("Computing CV...")
-cv_gp1 = cross_val_score(mul_gp1, data[data_features[1:11]], data["eval"], cv=10)
-print('CV-prediction error rate :: {}'.format(cv_gp1))
+print('Multiclass (One-vs-All) Gaussian Process Train Accuracy :: {}\n'.format(metrics.accuracy_score(train_y, mul_gp1.predict(train_x))))
+print('Multiclass (One-vs-All) Gaussian Process Test Accuracy :: {}\n'.format(metrics.accuracy_score(test_y, mul_gp1.predict(test_x))))
+print("Computing CV...\n")
+cv_gp1 = cross_val_score(mul_gp1, data1[data_features[1:11]], data1["eval"], cv=10)
+print('CV-prediction error rate :: {}\n'.format(cv_gp1))
 #mean cv and the 95% confidence interval of the cv's estimate
-print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv_gp1.mean(), cv_gp1.std() * 2)) 
+print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp1.mean(), cv_gp1.std() * 2)) 
 
 # Multiclass as One-vs-One
 mul_gp2 = gaussian_process.GaussianProcessClassifier(kernel=1.0 * Matern(length_scale=1.0, length_scale_bounds=(1e-1, 10.0),
                         nu=1.5), multi_class='one_vs_one').fit(train_x, train_y)
 
-print('Multiclass (One-vs-One) Gaussian Process Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_gp2.predict(train_x))))
-print('Multiclass (One-vs-One) Gaussian Process Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_gp2.predict(test_x))))
-print("Computing CV...")
-cv_gp2 = cross_val_score(mul_gp2, data[data_features[1:11]], data["eval"], cv=10)
+print('Multiclass (One-vs-One) Gaussian Process Train Accuracy :: {}\n'.format(metrics.accuracy_score(train_y, mul_gp2.predict(train_x))))
+print('Multiclass (One-vs-One) Gaussian Process Test Accuracy :: {}\n'.format(metrics.accuracy_score(test_y, mul_gp2.predict(test_x))))
+print("Computing CV...\n")
+cv_gp2 = cross_val_score(mul_gp2, data1[data_features[1:11]], data1["eval"], cv=10)
 #print('CV-prediction error rate :: {}'.format(cv_gp2))
 #mean cv and the 95% confidence interval of the cv's estimate
-print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv_gp2.mean(), cv_gp2.std() * 2))
+print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp2.mean(), cv_gp2.std() * 2))
 # =============================================================================
 
