@@ -28,7 +28,7 @@ def validate_cmdline_args(nargs, msg):
         sys.exit(1)
         
 # =============================================================================
-validate_cmdline_args(2,'Usage: python MultinomialLogRegression.py <DATASET_PATH>')
+validate_cmdline_args(3,'Usage: python MultinomialLogRegression.py <DATASET_PATH>')
 # When 2 arguments given: python GP.py <DATAPATH>, 
 # it will split the data into train:test=7:3
 if len(sys.argv)==2:
