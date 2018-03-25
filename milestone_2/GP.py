@@ -92,11 +92,14 @@ mul_gp1 = gaussian_process.GaussianProcessClassifier(kernel=1.0 * Matern(length_
 
 print('Multiclass (One-vs-All) Gaussian Process Train Accuracy :: {}\n'.format(metrics.accuracy_score(train_y, mul_gp1.predict(train_x))))
 print('Multiclass (One-vs-All) Gaussian Process Test Accuracy :: {}\n'.format(metrics.accuracy_score(test_y, mul_gp1.predict(test_x))))
-print("Computing CV...\n")
-cv_gp1 = cross_val_score(mul_gp1, data1[data_features[1:11]], data1["eval"], cv=10)
+
+
+# Cross Validation takes too much computation time.
+#print("Computing CV...\n")
+#cv_gp1 = cross_val_score(mul_gp1, data1[data_features[1:11]], data1["eval"], cv=10)
 #print('CV-prediction error rate :: {}\n'.format(cv_gp1))
 #mean cv and the 95% confidence interval of the cv's estimate
-print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp1.mean(), cv_gp1.std() * 2)) 
+#print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp1.mean(), cv_gp1.std() * 2)) 
 
 # Multiclass as One-vs-One
 mul_gp2 = gaussian_process.GaussianProcessClassifier(kernel=1.0 * Matern(length_scale=1.0, length_scale_bounds=(1e-1, 10.0),
@@ -104,10 +107,13 @@ mul_gp2 = gaussian_process.GaussianProcessClassifier(kernel=1.0 * Matern(length_
 
 print('Multiclass (One-vs-One) Gaussian Process Train Accuracy :: {}\n'.format(metrics.accuracy_score(train_y, mul_gp2.predict(train_x))))
 print('Multiclass (One-vs-One) Gaussian Process Test Accuracy :: {}\n'.format(metrics.accuracy_score(test_y, mul_gp2.predict(test_x))))
-print("Computing CV...\n")
-cv_gp2 = cross_val_score(mul_gp2, data1[data_features[1:11]], data1["eval"], cv=10)
+
+
+# Cross Validation takes too much computation time.
+#print("Computing CV...\n")
+#cv_gp2 = cross_val_score(mul_gp2, data1[data_features[1:11]], data1["eval"], cv=10)
 #print('CV-prediction error rate :: {}'.format(cv_gp2))
 #mean cv and the 95% confidence interval of the cv's estimate
-print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp2.mean(), cv_gp2.std() * 2))
+#print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp2.mean(), cv_gp2.std() * 2))
 # =============================================================================
 
