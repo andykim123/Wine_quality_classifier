@@ -94,7 +94,7 @@ print('Multiclass (One-vs-All) Gaussian Process Train Accuracy :: {}\n'.format(m
 print('Multiclass (One-vs-All) Gaussian Process Test Accuracy :: {}\n'.format(metrics.accuracy_score(test_y, mul_gp1.predict(test_x))))
 print("Computing CV...\n")
 cv_gp1 = cross_val_score(mul_gp1, data1[data_features[1:11]], data1["eval"], cv=10)
-print('CV-prediction error rate :: {}\n'.format(cv_gp1))
+#print('CV-prediction error rate :: {}\n'.format(cv_gp1))
 #mean cv and the 95% confidence interval of the cv's estimate
 print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp1.mean(), cv_gp1.std() * 2)) 
 
