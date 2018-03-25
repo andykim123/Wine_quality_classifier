@@ -27,7 +27,7 @@ validate_cmdline_args(2,'Usage: python MultinomialLogRegression.py <DATASET_PATH
 DATASET_PATH = sys.argv[1]
 data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"] #12
 data = pd.read_csv(DATASET_PATH,names=data_features)
-train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],data[data_features[11]], train_size=0.7)
+train_x, test_x, train_y, test_y = train_test_split(data[data_features[1:11]],data["eval"], train_size=0.7)
 
 # Multiclass as One-vs-All
 mul_gp1 = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_rest').fit(train_x, train_y)
