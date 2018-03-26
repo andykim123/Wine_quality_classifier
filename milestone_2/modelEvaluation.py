@@ -4,10 +4,6 @@ import os.path
 import sys
 import random
 import subprocess
-from sklearn import svm
-from sklearn import metrics
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import train_test_split
 from scipy import stats as stats
 
 pd.options.mode.chained_assignment = None  # default='warn'
