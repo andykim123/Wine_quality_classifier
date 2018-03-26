@@ -25,8 +25,8 @@ if not run_infile:
     train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],data[data_features[11]], train_size=0.7)
     clf_fit = clf.fit(train_x,train_y)
     print('SVM Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf_fit.predict(train_x))))
-	print('SVM Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_fit.predict(test_x))))
-	print('Multinomial CV-prediction error rate :: {}'.format(cross_val_score(clf, data[data_features[:10]], data[data_features[11]], cv=10)))
+    print('SVM Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_fit.predict(test_x))))
+    print('SVM Multinomial CV-prediction error rate :: {}'.format(cross_val_score(clf, data[data_features[:10]], data[data_features[11]], cv=10)))
     mask = (2 < train_y) & (train_y < 5)
     train_y[mask] = 0
     mask = (4 < train_y) & (train_y < 7)
@@ -54,4 +54,4 @@ if not run_infile:
 else:
     train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],data[data_features[11]], train_size=0.7)
     clf_fit = clf.fit(train_x,train_y)
-    return metrics.accuracy_score(test_y, clf_fit.predict(test_x))
+    print(metrics.accuracy_score(test_y, clf_fit.predict(test_x)))

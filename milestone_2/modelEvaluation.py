@@ -23,10 +23,9 @@ def validate_file_names(filename_1,filename_2,msg_1,msg_2):
 		print(msg_2)
 		sys.exit(1)
 
-validate_cmdline_args(5,'Usage: python kernelSVM.py <NAME OF MODEL_1 FILE> <NAME OF MODEL_2 FILE> <DATASET_PATH_RED> <DATASET_PATH_WHITE>')
+validate_cmdline_args(4,'Usage: python kernelSVM.py <NAME OF MODEL_1 FILE> <NAME OF MODEL_2 FILE> <DATASET_PATH>')
 validate_file_names(sys.argv[1],sys.argv[2],"Invalid file name: "+sys.argv[1],"Invalid file name: "+sys.argv[2])
-DATASET_PATH_RED = sys.argv[3]
-DATASET_PATH_WHITE = sys.argv[4]
+DATASET_PATH = sys.argv[3]
 
 model_1 = sys.argv[1]
 model_2 = sys.argv[2]
@@ -34,10 +33,12 @@ model_2 = sys.argv[2]
 print(model_1)
 print(model_2)
 
-
-
-proc = subprocess.Popen(['python', model_1,  DATASET_PATH_RED, DATASET_PATH_WHITE, "true"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-print proc.communicate()[0]
+# proc = subprocess.Popen(['python', model_1,  DATASET_PATH, "true"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+proc = subprocess.check_output([sys.executable, model_1, DATASET_PATH, "true"])
+print("back in model evaluation")
+# print(proc.communicate()[0])
+print("jamjam"+proc)
+print("done in model evaluation")
 
 
 
