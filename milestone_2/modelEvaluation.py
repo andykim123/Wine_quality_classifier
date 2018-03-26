@@ -21,8 +21,14 @@ def validate_file_names(filename_1,filename_2,msg_1,msg_2):
 		print(msg_2)
 		sys.exit(1)
 
+def validate_data_name(dataname,msg):
+	if not os.path.isfile(dataname):
+		print(msg)
+		sys.exit(1)
+
 validate_cmdline_args(5,'Usage: python kernelSVM.py <NAME OF MODEL_1 FILE> <NAME OF MODEL_2 FILE> <DATASET_PATH>')
 validate_file_names(sys.argv[1],sys.argv[2],"Invalid file name: "+sys.argv[1],"Invalid file name: "+sys.argv[2])
+validate_data_name(sys.argv[3],"Invalid data file name: "+sys.argv[3])
 DATASET_PATH = sys.argv[3]
 
 model_1 = sys.argv[1]
