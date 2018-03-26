@@ -54,4 +54,4 @@ if not run_infile:
 else:
     train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],data[data_features[11]], train_size=0.7)
     clf_fit = clf.fit(train_x,train_y)
-    print(metrics.accuracy_score(test_y, clf_fit.predict(test_x)))
+    print(cross_val_score(clf, data[data_features[:10]], data[data_features[11]], cv=10))
