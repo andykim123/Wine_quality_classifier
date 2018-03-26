@@ -31,6 +31,8 @@ model_2 = sys.argv[2]
 list_1 = []
 list_2 = []
 
+alpha = 0.05
+
 # list_2 = random.sample(xrange(100), 10)
 
 print("Files to be used:")
@@ -57,9 +59,9 @@ print("-----------------------")
 # print(model_1+"- Mean: "+str(np.mean(list_1))+", Standard Deviation: "+str(np.sqrt(np.var(list_1))))
 t_test_result = stats.ttest_ind(list_1,list_2,equal_var=False)
 print("P-Value: "+str(t_test_result.pvalue))
-if t_test_result.statistic<0 and t_test_result.pvalue<0.05:
+if t_test_result.statistic<0 and t_test_result.pvalue<alpha:
     print("Significantly, "+model_2+" is better than "+model_1)
-elif t_test_result.statistic>=0 and t_test_result.pvalue<0.05:
+elif t_test_result.statistic>=0 and t_test_result.pvalue<alpha:
 	print("Significantly, "+model_1+" is better than "+model_2)
 else:
     if t_test_result.static>=0:
