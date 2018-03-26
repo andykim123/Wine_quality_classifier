@@ -29,7 +29,9 @@ def validate_cmdline_args(nargs, msg):
         
 # =============================================================================
 validate_cmdline_args(3,'Usage: python MultinomialLogRegression.py <DATASET_PATH> OPTIONAL(<TEST_DATA_PATH>) <RUN INFILE BOOLEAN>')
-# When 2 arguments given: python GP.py <DATAPATH>, 
+# run_infile_boolean is a boolean which checks whether a particular run is done within other python file or not
+# if it is true, it indicates that the run in done withtin other python file run. If false, it is done in command line.
+# When 3 arguments given: python GP.py <DATAPATH> <RUN INFILE BOOLEAN>, 
 # it will split the data into train:test=7:3
 
 run_infile = False
@@ -109,6 +111,7 @@ if not run_infile:
     #print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp2.mean(), cv_gp2.std() * 2))
     # =============================================================================
 else:
+    #if the run in done within modelEvaluation.py, we just return cross_val_score result, which is a list of 10 different float-type accuracies
     mul_gp1 = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_rest').fit(train_x, train_y)
     print(cross_val_score(mul_gp1, data1[data_features[1:11]], data1["eval"], cv=10))
 
