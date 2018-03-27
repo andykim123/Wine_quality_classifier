@@ -20,8 +20,10 @@ run_infile = sys.argv[2]
 
 data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"]
 data = pd.read_csv(DATASET_PATH,names=data_features)
-clf = svm.SVC(decision_function_shape='ovo',kernel='rbf',gamma=2)
-# clf = svm.SVC(decision_function_shape='ovo',kernel='poly',degree=2,coef0=2)
+#clf = svm.SVC(decision_function_shape='ovo',kernel='linear') #~0.5-0.63
+clf = svm.SVC(decision_function_shape='ovo',kernel='poly',degree=2,coef0=10) #~0.48-0.62
+#clf = svm.SVC(decision_function_shape='ovo',kernel='rbf', gamma=4) #~0.42-0.46
+#clf = svm.SVC(decision_function_shape='ovo',kernel='sigmoid', coef0=20) #~0.42
 
 if not run_infile:
     train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],data[data_features[11]], train_size=0.7)
