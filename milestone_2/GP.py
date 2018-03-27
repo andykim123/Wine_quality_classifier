@@ -36,12 +36,8 @@ validate_cmdline_args(3,'Usage: python MultinomialLogRegression.py <DATASET_PATH
 
 run_infile = False
 
-print(len(sys.argv))
-print(run_infile)
-
 if len(sys.argv)==3:
     #DATASET_PATH = "/Users/dohoonkim/Desktop/cse517a/ApplicationProject/winequality-red.csv"
-    print("work?")
     DATASET_PATH = sys.argv[1]
     data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"] #12
     data1 = pd.read_csv(DATASET_PATH,names=data_features)
