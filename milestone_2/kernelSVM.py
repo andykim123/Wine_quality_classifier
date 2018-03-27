@@ -23,6 +23,9 @@ data = pd.read_csv(DATASET_PATH,names=data_features)
 clf = svm.SVC(decision_function_shape='ovo',kernel='rbf',gamma=2)
 # clf = svm.SVC(decision_function_shape='ovo',kernel='poly',degree=2,coef0=2)
 
+if(sys.argv[2]=="true" or sys.argv[2]=="True"):
+    run_infile = True
+
 if not run_infile:
     train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],data[data_features[11]], train_size=0.7)
     clf_fit = clf.fit(train_x,train_y)
