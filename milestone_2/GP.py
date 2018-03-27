@@ -36,13 +36,18 @@ validate_cmdline_args(3,'Usage: python MultinomialLogRegression.py <DATASET_PATH
 
 run_infile = False
 
+print(len(sys.argv))
+print(run_infile)
+
 if len(sys.argv)==3:
     #DATASET_PATH = "/Users/dohoonkim/Desktop/cse517a/ApplicationProject/winequality-red.csv"
+    print("work?")
     DATASET_PATH = sys.argv[1]
     data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"] #12
     data1 = pd.read_csv(DATASET_PATH,names=data_features)
     train_x, test_x, train_y, test_y = train_test_split(data1[data_features[1:11]],data1["eval"], train_size=0.7)
-    run_infile = sys.argv[2]
+    if(sys.argv[2]=="true" or sys.argv[2]=="True"):
+        run_infile = True
     if not run_infile:
         print("\nSplitting... '%s' into Training set and Test set...\n" % DATASET_PATH[DATASET_PATH.rfind("/")+1: ])
 # When 3 arguments given: python GP.py <DATAPATH1> <DATAPATH2>,
@@ -58,6 +63,8 @@ elif len(sys.argv)==4:
     test_x  = data2[data_features[1:11]]
     train_y = data1["eval"]
     test_y  = data2["eval"]
+    if(sys.argv[2]=="true" or sys.argv[2]=="True"):
+        run_infile = True
     if not run_infile:
         print("Training... '%s'\n" % DATASET_PATH1[DATASET_PATH1.rfind("/")+1: ])
         print("Testing... '%s'\n" % DATASET_PATH2[DATASET_PATH2.rfind("/")+1: ])
