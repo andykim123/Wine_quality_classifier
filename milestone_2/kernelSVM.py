@@ -23,6 +23,8 @@ data = pd.read_csv(DATASET_PATH,names=data_features)
 clf = svm.SVC(decision_function_shape='ovo',kernel='rbf',gamma=2)
 # clf = svm.SVC(decision_function_shape='ovo',kernel='poly',degree=2,coef0=2)
 
+run_infile = False
+
 if(sys.argv[2]=="true" or sys.argv[2]=="True"):
     run_infile = True
 
