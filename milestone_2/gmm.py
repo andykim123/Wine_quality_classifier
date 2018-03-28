@@ -35,8 +35,6 @@ test_x_white = data_white[data_features[0:11]]
 test_y_white = data_white["eval"]
 normalized_x_red = StandardScaler().fit_transform(test_x_red)
 normalized_x_white = StandardScaler().fit_transform(test_x_white)
-# X_train = np.load('data.npy')
-# print(X_train)
 """
 'full' (each component has its own general covariance matrix),
 'tied' (all components share the same general covariance matrix),
@@ -44,15 +42,14 @@ normalized_x_white = StandardScaler().fit_transform(test_x_white)
 'spherical' (each component has its own single variance).
 """
 Ks = range(1, 11)
-# n_components = np.arange(1, 21)
-# models = [GaussianMixture(n, covariance_type='full', random_state=0).fit(normalized_x_red)
-#           for n in Ks]
+models = [GaussianMixture(n, covariance_type='full', random_state=0).fit(normalized_x_red)
+          for n in Ks]
 
-# plt.plot(Ks, [m.bic(normalized_x_red) for m in models], label='BIC')
-# plt.plot(Ks, [m.aic(normalized_x_red) for m in models], label='AIC')
-# plt.legend(loc='best')
-# plt.xlabel('Ks');
-# plt.show()
+plt.plot(Ks, [m.bic(normalized_x_red) for m in models], label='BIC')
+plt.plot(Ks, [m.aic(normalized_x_red) for m in models], label='AIC')
+plt.legend(loc='best')
+plt.xlabel('Ks');
+plt.show()
 def draw_ellipse(position, covariance, ax=None, **kwargs):
     """Draw an ellipse with a given position and covariance"""
     ax = ax or plt.gca()
@@ -87,22 +84,38 @@ def plot_gmm(gmm, X, label=True, ax=None):
     for pos, covar, w in zip(gmm.means_, gmm.covariances_, gmm.weights_):
         draw_ellipse(pos, covar, alpha=w * w_factor)
 gmx = GaussianMixture(n_components=8, covariance_type='full', random_state=42)
-# labels = gmx.fit(normalized_x_red).predict(test_x_red)
-plot_gmm(gmx, normalized_x_red)
-# ax.scatter(normalized_x_red[:, 0], normalized_x_red[:, 1], c=labels, s=40, cmap='viridis', zorder=2)
-# plt.scatter(normalized_x_red[:, 3], normalized_x_red[:, 5], c=labels, s=40, cmap='viridis');
+# plot_gmm(gmx, normalized_x_red)
+labels = gmx.fit(normalized_x_red).predict(normalized_x_red)
+centroids = gmx.means_
+# plt.scatter(normalized_x_red[:, 0], normalized_x_red[:, 1], c=labels, s=40, cmap='viridis', zorder=2)
+# plt.scatter(centroids[:,0], centroids[:,1], marker='*', s=200, label='centroids', c='g')
+# plt.legend()
+# plt.ylabel('feature 0')
+# plt.xlabel('feature 1')
+# # plt.title('WHITE using covariance type: '+cv_type)
 # plt.show()
-# centroids = gmx.means_
-# fig = plt.figure()
-# ax = Axes3D(fig)
-# ax.scatter(normalized_x_red[:,0], normalized_x_red[:,1], normalized_x_red[:,2])
-# ax.scatter(centroids[:, 0], centroids[:, 1], centroids[:, 2], marker='*', c='#050505', s=5000)
 
-# plt.show()
+plt.scatter(normalized_x_red[:,3], normalized_x_red[:,5], c='#050505', s=7)
+plt.scatter(centroids[:,3], centroids[:,5], marker='*', label='centroids', s=200, c='g')
+plt.legend()
+plt.ylabel('feature 3')
+plt.xlabel('feature 5')
+# plt.title('WHITE using covariance type: '+cv_type)
+plt.show()
+plt.scatter(normalized_x_red[:,3], normalized_x_red[:,5], c=labels, s=7)
+plt.scatter(centroids[:,3], centroids[:,5], marker='*', label='centroids', s=200, c='g')
+plt.legend()
+plt.ylabel('feature 3')
+plt.xlabel('feature 5')
+# plt.title('WHITE using covariance type: '+cv_type)
+plt.show()
+
+fig = plt.figure()
+ax = Axes3D(fig)
+ax.scatter(normalized_x_red[:,0], normalized_x_red[:,1], normalized_x_red[:,2])
+ax.scatter(centroids[:, 0], centroids[:, 1], centroids[:, 2], marker='*', c='#050505', s=5000)
 # ax.show()
 # print(gmx.means_)
-# plt.scatter(normalized_x_red[:,3], normalized_x_red[:,5], c='#050505', s=7)
-# plt.scatter(centroids[:,3], centroids[:,5], marker='*', s=200, c='g')
 # plt.show()
 # km[i].means_ : # clusters x # features
 # km[i].covariances_ : # clusters x # features x # features
