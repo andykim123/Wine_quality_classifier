@@ -30,10 +30,13 @@ data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcoho
 data_red = pd.read_csv(DATASET_PATH_RED,names=data_features)
 data_white = pd.read_csv(DATASET_PATH_WHITE,names=data_features)
 test_x_red = data_red[data_features[0:11]]
+test_x_red_23 = data_red[data_features[1:3]]
+print(test_x_red_35)
 test_y_red = data_red["eval"]
 test_x_white = data_white[data_features[0:11]]
 test_y_white = data_white["eval"]
 normalized_x_red = StandardScaler().fit_transform(test_x_red)
+normalized_x_red_23 = StandardScaler().fit_transform(test_x_red_23)
 normalized_x_white = StandardScaler().fit_transform(test_x_white)
 """
 'full' (each component has its own general covariance matrix),
@@ -62,9 +65,9 @@ def draw_ellipse(position, covariance, ax=None, **kwargs):
     else:
         angle = 0
         # print(covariance[:,0:1])
-        width = 2 * np.sqrt(abs(covariance[:,0]))
-        height = 2 * np.sqrt(abs(covariance[:,1]))
-        # width, height = 2 * np.sqrt(covariance)
+        # width = 2 * np.sqrt(abs(covariance[:,0]))
+        # height = 2 * np.sqrt(abs(covariance[:,1]))
+        width, height = 2 * np.sqrt(covariance)
         print(width)
         print(height)
 
@@ -74,6 +77,7 @@ def draw_ellipse(position, covariance, ax=None, **kwargs):
 def plot_gmm(gmm, X, label=True, ax=None):
     ax = ax or plt.gca()
     labels = gmm.fit(X).predict(X)
+    print(X[:,1])
     if label:
         ax.scatter(X[:, 0], X[:, 1], c=labels, s=40, cmap='viridis', zorder=2)
     else:
@@ -84,10 +88,11 @@ def plot_gmm(gmm, X, label=True, ax=None):
     for pos, covar, w in zip(gmm.means_, gmm.covariances_, gmm.weights_):
         draw_ellipse(pos, covar, alpha=w * w_factor)
 gmx = GaussianMixture(n_components=8, covariance_type='full', random_state=42)
+gmx_23 = GaussianMixture(n_components=8, covariance_type='full', random_state=42)
 # gmx = GaussianMixture(n_components=8, covariance_type='diag', random_state=42)
 # gmx = GaussianMixture(n_components=8, covariance_type='tied')
 # gmx = GaussianMixture(n_components=8, covariance_type='spherical')
-# plot_gmm(gmx, normalized_x_red)
+plot_gmm(gmx_23, normalized_x_red_23)
 labels = gmx.fit(normalized_x_red).predict(normalized_x_red)
 centroids = gmx.means_
 # plt.scatter(normalized_x_red[:, 0], normalized_x_red[:, 1], c=labels, s=40, cmap='viridis', zorder=2)
