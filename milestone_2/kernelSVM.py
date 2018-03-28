@@ -12,11 +12,11 @@ def validate_cmdline_args(nargs, msg):
     if len(sys.argv) < nargs:
         print(msg)
         sys.exit(1)
-validate_cmdline_args(3,'Usage: python kernelSVM.py <DATASET_PATH_RED> <DATASET_PATH_RED>')
+validate_cmdline_args(3,'Usage: python kernelSVM.py <DATASET_PATH> <RUN INFILE BOOLEAN>')
 # run_infile_boolean is a boolean which checks whether a particular run is done within other python file or not
 # if it is true, it indicates that the run in done withtin other python file run. If false, it is done in command line.
-DATASET_PATH_RED = sys.argv[1]
-DATASET_PATH_WHITE = sys.argv[2]
+DATASET_PATH = sys.argv[1]
+run_infile = sys.argv[2]
 
 data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"]
 data = pd.read_csv(DATASET_PATH,names=data_features)
