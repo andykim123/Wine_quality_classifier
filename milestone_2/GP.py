@@ -158,6 +158,7 @@ if not run_infile:
     # =============================================================================
 else:
     #if the run in done within modelEvaluation.py, we just return cross_val_score result, which is a list of 10 different float-type accuracies
-    mul_gp1 = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_rest').fit(train_x, train_y)
-    print(cross_val_score(mul_gp1, data1[data_features[1:11]], data1["eval"], cv=10))
-    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv_gp1.mean(), cv_gp1.std() * 2))
+    mul_gp = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_rest').fit(train_x, train_y)
+    cv = cross_val_score(mul_gp, data1[data_features[0:11]], data1["eval"], cv=10)
+    print(cross_val_score(mul_gp, data1[data_features[0:11]], data1["eval"], cv=10))
+    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv.mean(), cv.std() * 2))
