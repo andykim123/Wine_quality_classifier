@@ -79,14 +79,14 @@ print("P-Value: "+str(t_test_result.pvalue))
 # if p-value is smaller than alpha, we have statistical evidence that the means are different
 # then, we indicate which is larger
 if t_test_result.statistic<0 and t_test_result.pvalue<alpha:
-    print("Significantly, "+model_2+" is better than "+model_1)
+    print("Significantly, "+model_2+" is better than "+model_1+" / "+model_1+" mean accuracy: "+str(np.mean(list_1))+" / "+model_2+" mean accuracy: "+str(np.mean(list_2)))
 elif t_test_result.statistic>=0 and t_test_result.pvalue<alpha:
-	print("Significantly, "+model_1+" is better than "+model_2)
+	print("Significantly, "+model_1+" is better than "+model_2+" / "+model_1+" mean accuracy: "+str(np.mean(list_1))+" / "+model_2+" mean accuracy: "+str(np.mean(list_2)))
 else:
 	# if not, we do not have any statistical evidence that the means are different
 	# however, we still indicate the user that which model have slightly better accuracy
 	# but we make sure that that does not indicate the statistically significant difference
     if t_test_result.static>=0:
-        print("Statistically, no difference detected. But in this sample, "+model_1+"is slightly better.\n"+model_1+" mean accuracy: "+str(np.mean(list_1)))
+        print("Statistically, no difference detected. But in this sample, "+model_1+"is slightly better. "+model_1+" mean accuracy: "+str(np.mean(list_1)))
     else:
-        print("Statistically, no difference detected. But in this sample, "+model_2+"is slightly better.\n"+model_2+" mean accuracy: "+str(np.mean(list_2)))
+        print("Statistically, no difference detected. But in this sample, "+model_2+"is slightly better. "+model_2+" mean accuracy: "+str(np.mean(list_2)))
