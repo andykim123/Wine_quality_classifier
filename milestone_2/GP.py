@@ -161,4 +161,4 @@ else:
     mul_gp = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_rest').fit(train_x, train_y)
     cv = cross_val_score(mul_gp, data1[data_features[0:11]], data1["eval"], cv=10)
     print(cross_val_score(mul_gp, data1[data_features[0:11]], data1["eval"], cv=10))
-    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv.mean(), cv.std() * 2))
+    # print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv.mean(), cv.std() * 2))

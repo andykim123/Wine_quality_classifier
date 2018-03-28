@@ -64,5 +64,4 @@ if not run_infile:
 else:
 	#if the run in done within modelEvaluation.py, we just return cross_val_score result, which is a list of 10 different float-type accuracies
     train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],data[data_features[11]], train_size=0.7)
-    clf_fit = clf.fit(train_x,train_y)
     print(cross_val_score(clf, data[data_features[:10]], data[data_features[11]], cv=10))

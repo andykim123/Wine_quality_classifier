@@ -18,7 +18,7 @@ def validate_cmdline_args(nargs, msg):
     if len(sys.argv) < nargs:
         print(msg)
         sys.exit(1)
-validate_cmdline_args(2,'Usage: python MultinomialLogRegression.py <DATASET_PATH>')
+validate_cmdline_args(3,'Usage: python MultinomialLogRegression.py <DATASET_PATH> <RUN INFILE BOOLEAN>')
 
 #DATASET_PATH = "/Users/dohoonkim/Desktop/cse517a/ApplicationProject/winequality-red.csv"
 DATASET_PATH = sys.argv[1]
@@ -27,10 +27,18 @@ data = pd.read_csv(DATASET_PATH,names=data_features)
 train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],data[data_features[11]], train_size=0.7)
 
 lr = linear_model.LogisticRegression()
-lr.fit(train_x, train_y)
 mul_lr = linear_model.LogisticRegression(multi_class='multinomial', solver='newton-cg')
+lr.fit(train_x, train_y)
 mul_lr_fit = mul_lr.fit(train_x, train_y)
 
-print('Multinomial Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_lr_fit.predict(train_x))))
-print('Multinomial Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_lr_fit.predict(test_x))))
-print('CV-prediction error rate :: {}'.format(cross_val_score(lr, data[data_features[:10]], data[data_features[11]], cv=10)))
+run_infile = False
+
+if(sys.argv[2]=="true" or sys.argv[2]=="True"):
+    run_infile = True
+
+if not run_infile:
+    print('Multinomial Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_lr_fit.predict(train_x))))
+    print('Multinomial Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_lr_fit.predict(test_x))))
+    print('CV-prediction error rate :: {}'.format(cross_val_score(lr, data[data_features[:10]], data[data_features[11]], cv=10)))
+else:
+    print(cross_val_score(mul_lr, data[data_features[:10]], data[data_features[11]], cv=10))
