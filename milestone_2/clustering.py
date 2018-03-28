@@ -26,8 +26,14 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from mpl_toolkits.mplot3d import Axes3D
 
-DATASET_PATH_RED = "/Users/dohoonkim/Desktop/cse517a/ApplicationProject/winequality-red.csv"
-DATASET_PATH_WHITE = "/Users/dohoonkim/Desktop/cse517a/ApplicationProject/winequality-white.csv"
+
+def validate_cmdline_args(nargs, msg):
+    if len(sys.argv) < nargs:
+        print(msg)
+        sys.exit(1)
+validate_cmdline_args(3,'Usage: python clustering.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>')
+DATASET_PATH_RED = sys.argv[1]
+DATASET_PATH_WHITE = sys.argv[2]
 
 data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"]
 
@@ -40,6 +46,10 @@ normalized_x = StandardScaler().fit_transform(test_x)
 Ks = range(1, 11)
 km = [KMeans(n_clusters=i, random_state=1).fit(normalized_x) for i in Ks]
 inertia = [km[i].inertia_ for i in range(len(km))]
+plt.plot(Ks,inertia)
+plt.ylabel('Inertia')
+plt.xlabel('# clusters')
+plt.show()
 clusters_df = pd.DataFrame( { "num_clusters":Ks, "cluster_errors": inertia } )
 
 """general k-means clustering"""
@@ -73,7 +83,7 @@ eig_pairs.sort(key = lambda x: x[0], reverse= True)
 tot = sum(eig_vals)
 var_exp = [(i/tot)*100 for i in sorted(eig_vals, reverse=True)] # Individual explained variance
 cum_var_exp = np.cumsum(var_exp) # Cumulative explained variance
-# PLOT OUT THE EXPLAINED VARIANCES SUPERIMPOSED 
+# PLOT OUT THE EXPLAINED VARIANCES SUPERIMPOSED
 plt.figure(figsize=(10, 5))
 plt.bar(range(11), var_exp, alpha=0.3333, align='center', label='individual explained variance', color = 'g')
 plt.step(range(11), cum_var_exp, where='mid',label='cumulative explained variance')
