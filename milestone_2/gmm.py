@@ -7,6 +7,8 @@ Created on Tu Mar 27 15:58:01 2018
 """
 
 import numpy as np
+import itertools
+from scipy import linalg
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
@@ -39,12 +41,54 @@ normalized_x_white = StandardScaler().fit_transform(test_x_white)
 'spherical' (each component has its own single variance).
 """
 Ks = range(1, 11)
+color_iter = itertools.cycle(['navy', 'c', 'cornflowerblue', 'gold',
+                              'darkorange'])
+def plot_results(X, Y_, means, covariances, index, title):
+    splot = plt.subplot(2, 1, 1 + index)
+    for i, (mean, covar, color) in enumerate(zip(
+            means, covariances, color_iter)):
+        print(covar)
+        v, w = linalg.eigh(covar)
+        v = 2. * np.sqrt(2.) * np.sqrt(v)
+        u = w[0] / linalg.norm(w[0])
+        # as the DP will not use every component it has access to
+        # unless it needs it, we shouldn't plot the redundant
+        # components.
+        if not np.any(Y_ == i):
+            continue
+        plt.scatter(X[Y_ == i, 0], X[Y_ == i, 1], .8, color=color)
+
+        # Plot an ellipse to show the Gaussian component
+        angle = np.arctan(u[1] / u[0])
+        angle = 180. * angle / np.pi  # convert to degrees
+        ell = mpl.patches.Ellipse(mean, v[0], v[1], 180. + angle, color=color)
+        ell.set_clip_box(splot.bbox)
+        ell.set_alpha(0.5)
+        splot.add_artist(ell)
+n_classes = len(np.unique(test_y_red))
+gmm         = GaussianMixture(n_components=11, covariance_type='diag')
+# gmm.means_  = np.array([test_x_red[test_y_red == i].mean(axis=0)
+#                               for i in xrange(n_classes)])
+gmm.fit(test_x_red)
+# plot_results(test_x_red, gmm.predict(test_x_red), gmm.means_, gmm.covariances_, 0,
+#              'Gaussian Mixture')
+label   = gmm.predict(test_x_red)
+train_accuracy      = np.mean(label == test_y_red) * 100
+print(train_accuracy)
 # km[i].means_ : # clusters x # features
 # km[i].covariances_ : # clusters x # features x # features
 """red"""
 for cv_type in ['full', 'tied', 'diag', 'spherical']:
+    # gmm         = [GaussianMixture(n_components=i, covariance_type=cv_type) for i in Ks]
+    # for j in Ks:
+    #     gmm[j].means_  = np.array([test_x_red[test_y_red == i].mean(axis=0)
+    #                               for i in xrange(n_classes)])
+    # gmm.fit(normalized_x_red)
+    # labels = [gmm[i].predict(normalized_x_red) for i in range(len(gmm))]
+    # scores = [accuracy_score(test_y_red, labels[i]) for i in range(len(gmm))]
+    # print(scores)
     km = [GaussianMixture(n_components=i, covariance_type=cv_type).fit(normalized_x_red) for i in Ks]
-    labels = [km[i].predict(normalized_x_red) for i in range(len(km))]
+    labels = [km[i].predict(test_x_red) for i in range(len(km))]
     scores = [accuracy_score(test_y_red, labels[i]) for i in range(len(km))]
     print(scores)
     plt.plot(Ks,scores)
@@ -57,12 +101,12 @@ for cv_type in ['full', 'tied', 'diag', 'spherical']:
 """white"""
 for cv_type in ['full', 'tied', 'diag', 'spherical']:
     km = [GaussianMixture(n_components=i, covariance_type=cv_type).fit(normalized_x_white) for i in Ks]
-    labels = [km[i].predict(normalized_x_white) for i in range(len(km))]
+    labels = [km[i].predict(test_x_white) for i in range(len(km))]
     scores = [accuracy_score(test_y_white, labels[i]) for i in range(len(km))]
     print(scores)
     plt.plot(Ks,scores)
     plt.ylabel('accuracy')
     plt.xlabel('# clusters')
     plt.ylim(0,1)
-    plt.title('RED using covariance type: '+cv_type)
+    plt.title('WHITE using covariance type: '+cv_type)
     plt.show()
