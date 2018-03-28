@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tu Mar 27 15:58:01 2018
+
+@author: J
+"""
+
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
@@ -30,89 +38,31 @@ normalized_x_white = StandardScaler().fit_transform(test_x_white)
 'diag' (each component has its own diagonal covariance matrix),
 'spherical' (each component has its own single variance).
 """
-"""red"""
 Ks = range(1, 11)
-km = [GaussianMixture(n_components=i, covariance_type='full').fit(normalized_x_red) for i in Ks]
 # km[i].means_ : # clusters x # features
 # km[i].covariances_ : # clusters x # features x # features
-labels = [km[i].predict(normalized_x_red) for i in range(len(km))]
-scores = [accuracy_score(test_y_red, labels[i]) for i in range(len(km))]
-print(scores)
-plt.plot(Ks,scores)
-plt.ylabel('accuracy')
-plt.xlabel('# clusters')
-plt.ylim(0,1)
-plt.title('RED using covariance type: full')
-plt.show()
-km = [GaussianMixture(n_components=i, covariance_type='tied').fit(normalized_x_red) for i in Ks]
-labels = [km[i].predict(normalized_x_red) for i in range(len(km))]
-scores = [accuracy_score(test_y_red, labels[i]) for i in range(len(km))]
-print(scores)
-plt.plot(Ks,scores)
-plt.ylabel('accuracy')
-plt.xlabel('# clusters')
-plt.ylim(0,1)
-plt.title('RED using covariance type: tied')
-plt.show()
-km = [GaussianMixture(n_components=i, covariance_type='diag').fit(normalized_x_red) for i in Ks]
-labels = [km[i].predict(normalized_x_red) for i in range(len(km))]
-scores = [accuracy_score(test_y_red, labels[i]) for i in range(len(km))]
-print(scores)
-plt.plot(Ks,scores)
-plt.ylabel('accuracy')
-plt.xlabel('# clusters')
-plt.ylim(0,1)
-plt.title('RED using covariance type: diag')
-plt.show()
-km = [GaussianMixture(n_components=i, covariance_type='spherical').fit(normalized_x_red) for i in Ks]
-labels = [km[i].predict(normalized_x_red) for i in range(len(km))]
-scores = [accuracy_score(test_y_red, labels[i]) for i in range(len(km))]
-print(scores)
-plt.plot(Ks,scores)
-plt.ylabel('accuracy')
-plt.xlabel('# clusters')
-plt.title('RED using covariance type: spherical')
-plt.ylim(0,1)
-plt.show()
-# =============================================================================================================================
+"""red"""
+for cv_type in ['full', 'tied', 'diag', 'spherical']:
+    km = [GaussianMixture(n_components=i, covariance_type=cv_type).fit(normalized_x_red) for i in Ks]
+    labels = [km[i].predict(normalized_x_red) for i in range(len(km))]
+    scores = [accuracy_score(test_y_red, labels[i]) for i in range(len(km))]
+    print(scores)
+    plt.plot(Ks,scores)
+    plt.ylabel('accuracy')
+    plt.xlabel('# clusters')
+    plt.ylim(0,1)
+    plt.title('RED using covariance type: '+cv_type)
+    plt.show()
+# ===================================================================================================
 """white"""
-km = [GaussianMixture(n_components=i, covariance_type='full').fit(normalized_x_white) for i in Ks]
-labels = [km[i].predict(normalized_x_white) for i in range(len(km))]
-scores = [accuracy_score(test_y_white, labels[i]) for i in range(len(km))]
-print(scores)
-plt.plot(Ks,scores)
-plt.ylabel('accuracy')
-plt.xlabel('# clusters')
-plt.ylim(0,1)
-plt.title('WHITE using covariance type: full')
-plt.show()
-km = [GaussianMixture(n_components=i, covariance_type='tied').fit(normalized_x_white) for i in Ks]
-labels = [km[i].predict(normalized_x_white) for i in range(len(km))]
-scores = [accuracy_score(test_y_white, labels[i]) for i in range(len(km))]
-print(scores)
-plt.plot(Ks,scores)
-plt.ylabel('accuracy')
-plt.xlabel('# clusters')
-plt.ylim(0,1)
-plt.title('WHITE using covariance type: tied')
-plt.show()
-km = [GaussianMixture(n_components=i, covariance_type='diag').fit(normalized_x_white) for i in Ks]
-labels = [km[i].predict(normalized_x_white) for i in range(len(km))]
-scores = [accuracy_score(test_y_white, labels[i]) for i in range(len(km))]
-print(scores)
-plt.plot(Ks,scores)
-plt.ylabel('accuracy')
-plt.xlabel('# clusters')
-plt.ylim(0,1)
-plt.title('WHITE using covariance type: diag')
-plt.show()
-km = [GaussianMixture(n_components=i, covariance_type='spherical').fit(normalized_x_white) for i in Ks]
-labels = [km[i].predict(normalized_x_white) for i in range(len(km))]
-scores = [accuracy_score(test_y_white, labels[i]) for i in range(len(km))]
-print(scores)
-plt.plot(Ks,scores)
-plt.ylabel('accuracy')
-plt.xlabel('# clusters')
-plt.ylim(0,1)
-plt.title('WHITE using covariance type: spherical')
-plt.show()
+for cv_type in ['full', 'tied', 'diag', 'spherical']:
+    km = [GaussianMixture(n_components=i, covariance_type=cv_type).fit(normalized_x_white) for i in Ks]
+    labels = [km[i].predict(normalized_x_white) for i in range(len(km))]
+    scores = [accuracy_score(test_y_white, labels[i]) for i in range(len(km))]
+    print(scores)
+    plt.plot(Ks,scores)
+    plt.ylabel('accuracy')
+    plt.xlabel('# clusters')
+    plt.ylim(0,1)
+    plt.title('RED using covariance type: '+cv_type)
+    plt.show()
