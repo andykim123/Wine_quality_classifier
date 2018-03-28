@@ -87,7 +87,7 @@ if not run_infile:
     ##print('CV-prediction error rate :: {}'.format(cv_gp1))
     ##mean cv and the 95% confidence interval of the cv's estimate
     print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp1.mean(), cv_gp1.std() * 2))
-    print('---------------------------------------------') 
+    print('---------------------------------------------')  
     
     # Multiclass as One-vs-One
     t2 = time.time()
