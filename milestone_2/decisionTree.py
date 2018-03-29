@@ -3,6 +3,7 @@ import numpy as np
 import sys
 from sklearn import tree
 from sklearn import metrics
+from sklearn import preprocessing
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
 
@@ -41,5 +42,6 @@ if not run_infile:
     print('Decision Tree Binary Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_bin_fit.predict(test_x))))
     print('Binary CV-prediction error rate :: {}'.format(cross_val_score(clf, cv_x, cv_y, cv=10)))
 else:
-    train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],data[data_features[11]], train_size=0.7)
-    print(cross_val_score(clf, data[data_features[:10]], data[data_features[11]], cv=10))
+    x_fit = preprocessing.StandardScaler().fit(data[data_features[0:11]])
+    data_x = x_fit.transform(data[data_features[0:11]])
+    print(cross_val_score(clf, data_x, data["eval"], cv=10))

@@ -4,7 +4,7 @@ import os.path
 import sys
 import random
 import subprocess
-from scipy import stats as stats
+from scipy.stats import t
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
@@ -42,7 +42,7 @@ list_2 = []
 
 # Set alpha, a type-II error threshold.
 # Usually, it is either 0.1, 0.05, or 0.01
-alpha = 0.05
+alpha = 0.005
 
 # list_2 = random.sample(xrange(100), 10)
 
@@ -74,19 +74,45 @@ print("-----------------------")
 # print(model_1+"- Mean: "+str(np.mean(list_1))+", Standard Deviation: "+str(np.sqrt(np.var(list_1))))
 # conduct a two-sample two-tailed difference of mean t-test as we do not know the population variance
 # also, we set equal_var as False as we cannot make any assumption that those two sets share the same population variance
-t_test_result = stats.ttest_ind(list_1,list_2,equal_var=False)
-print("P-Value: "+str(t_test_result.pvalue))
-# if p-value is smaller than alpha, we have statistical evidence that the means are different
-# then, we indicate which is larger
-if t_test_result.statistic<0 and t_test_result.pvalue<alpha:
-    print("Significantly, "+model_2+" is better than "+model_1+" / "+model_1+" mean accuracy: "+str(np.mean(list_1))+" / "+model_2+" mean accuracy: "+str(np.mean(list_2)))
-elif t_test_result.statistic>=0 and t_test_result.pvalue<alpha:
-	print("Significantly, "+model_1+" is better than "+model_2+" / "+model_1+" mean accuracy: "+str(np.mean(list_1))+" / "+model_2+" mean accuracy: "+str(np.mean(list_2)))
-else:
-	# if not, we do not have any statistical evidence that the means are different
-	# however, we still indicate the user that which model have slightly better accuracy
-	# but we make sure that that does not indicate the statistically significant difference
-    if t_test_result.static>=0:
-        print("Statistically, no difference detected. But in this sample, "+model_1+"is slightly better. "+model_1+" mean accuracy: "+str(np.mean(list_1)))
+
+# t_test_result = stats.ttest_ind(list_1,list_2,equal_var=False)
+# print("P-Value: "+str(t_test_result.pvalue))
+# # if p-value is smaller than alpha, we have statistical evidence that the means are different
+# # then, we indicate which is larger
+# if t_test_result.statistic<0 and t_test_result.pvalue<alpha:
+#     print("Significantly, "+model_2+" is better than "+model_1+" / "+model_1+" mean accuracy: "+str(np.mean(list_1))+" / "+model_2+" mean accuracy: "+str(np.mean(list_2)))
+# elif t_test_result.statistic>=0 and t_test_result.pvalue<alpha:
+# 	print("Significantly, "+model_1+" is better than "+model_2+" / "+model_1+" mean accuracy: "+str(np.mean(list_1))+" / "+model_2+" mean accuracy: "+str(np.mean(list_2)))
+# else:
+# 	# if not, we do not have any statistical evidence that the means are different
+# 	# however, we still indicate the user that which model have slightly better accuracy
+# 	# but we make sure that that does not indicate the statistically significant difference
+#     if t_test_result.static>=0:
+#         print("Statistically, no difference detected. But in this sample, "+model_1+"is slightly better. "+model_1+" mean accuracy: "+str(np.mean(list_1)))
+#     else:
+#         print("Statistically, no difference detected. But in this sample, "+model_2+"is slightly better. "+model_2+" mean accuracy: "+str(np.mean(list_2)))
+
+t_score = (np.mean(list_1)-np.mean(list_2))/np.sqrt((np.var(list_1)/len(list_1))+(np.var(list_2)/len(list_2)))
+new_df = np.square((np.var(list_1)/len(list_1))+(np.var(list_2)/len(list_2)))/((np.square(np.var(list_1))/(np.square(len(list_1))*(len(list_1)-1)))+(np.square((np.var(list_2)))/(np.square(len(list_2))*(len(list_2)-1))))
+
+print(list_1)
+print(list_2)
+print(np.mean(list_1))
+print(np.mean(list_2))
+print("New degree of freedom: "+str(new_df))
+print("Test T-Score: "+str(t_score))
+
+if np.mean(list_1)>=np.mean(list_2):
+    compare_t = t.ppf(1-alpha,new_df)
+    print("Comparable T-score: "+str(compare_t))
+    if t_score>=compare_t:
+        print("Significantly, "+model_1+" is better than "+model_2+" / "+model_1+" mean accuracy: "+str(np.mean(list_1))+" / "+model_2+" mean accuracy: "+str(np.mean(list_2)))
     else:
-        print("Statistically, no difference detected. But in this sample, "+model_2+"is slightly better. "+model_2+" mean accuracy: "+str(np.mean(list_2)))
+        print("Statistically, no difference detected. But in this sample, "+model_1+"is slightly better. "+model_1+" mean accuracy: "+str(np.mean(list_1)))
+else:
+	compare_t = t.ppf(alpha,new_df)
+	print("Comparable T-score: "+str(compare_t))
+	if t_score<=compare_t:
+		print("Significantly, "+model_2+" is better than "+model_1+" / "+model_1+" mean accuracy: "+str(np.mean(list_1))+" / "+model_2+" mean accuracy: "+str(np.mean(list_2)))
+	else:
+		print("Statistically, no difference detected. But in this sample, "+model_2+"is slightly better. "+model_2+" mean accuracy: "+str(np.mean(list_2)))
