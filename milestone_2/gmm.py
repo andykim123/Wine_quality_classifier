@@ -31,7 +31,7 @@ data_red = pd.read_csv(DATASET_PATH_RED,names=data_features)
 data_white = pd.read_csv(DATASET_PATH_WHITE,names=data_features)
 test_x_red = data_red[data_features[0:11]]
 test_x_red_23 = data_red[data_features[1:3]]
-print(test_x_red_35)
+# print(test_x_red_35)
 test_y_red = data_red["eval"]
 test_x_white = data_white[data_features[0:11]]
 test_y_white = data_white["eval"]
@@ -48,11 +48,11 @@ Ks = range(1, 11)
 models = [GaussianMixture(n, covariance_type='full', random_state=0).fit(normalized_x_red)
           for n in Ks]
 
-plt.plot(Ks, [m.bic(normalized_x_red) for m in models], label='BIC')
-plt.plot(Ks, [m.aic(normalized_x_red) for m in models], label='AIC')
-plt.legend(loc='best')
-plt.xlabel('Ks');
-plt.show()
+# plt.plot(Ks, [m.bic(normalized_x_red) for m in models], label='BIC')
+# plt.plot(Ks, [m.aic(normalized_x_red) for m in models], label='AIC')
+# plt.legend(loc='best')
+# plt.xlabel('Ks');
+# plt.show()
 def draw_ellipse(position, covariance, ax=None, **kwargs):
     """Draw an ellipse with a given position and covariance"""
     ax = ax or plt.gca()
@@ -77,12 +77,20 @@ def draw_ellipse(position, covariance, ax=None, **kwargs):
 def plot_gmm(gmm, X, label=True, ax=None):
     ax = ax or plt.gca()
     labels = gmm.fit(X).predict(X)
+    centroids = gmm.means_
     print(X[:,1])
     if label:
         ax.scatter(X[:, 0], X[:, 1], c=labels, s=40, cmap='viridis', zorder=2)
+        ax.scatter(centroids[:,0], centroids[:,1], marker='*', s=200, label='centroids', c='g')
     else:
         ax.scatter(X[:, 0], X[:, 1], s=40, zorder=2)
     ax.axis('equal')
+    ax.set_xlabel('feature 2')
+    ax.set_ylabel('feature 3')
+    ax.set_xlim(-3,6)
+    ax.set_ylim(-2,4)
+    # ax.set_zlabel('feature 5')
+    plt.legend()
 
     w_factor = 0.2 / gmm.weights_.max()
     for pos, covar, w in zip(gmm.means_, gmm.covariances_, gmm.weights_):
@@ -93,44 +101,33 @@ gmx_23 = GaussianMixture(n_components=8, covariance_type='full', random_state=42
 # gmx = GaussianMixture(n_components=8, covariance_type='tied')
 # gmx = GaussianMixture(n_components=8, covariance_type='spherical')
 plot_gmm(gmx_23, normalized_x_red_23)
-labels = gmx.fit(normalized_x_red).predict(normalized_x_red)
-centroids = gmx.means_
+plt.show()
+# labels = gmx.fit(normalized_x_red).predict(normalized_x_red)
+# centroids = gmx.means_
 # plt.scatter(normalized_x_red[:, 0], normalized_x_red[:, 1], c=labels, s=40, cmap='viridis', zorder=2)
 # plt.scatter(centroids[:,0], centroids[:,1], marker='*', s=200, label='centroids', c='g')
 # plt.legend()
 # plt.ylabel('feature 0')
 # plt.xlabel('feature 1')
-# # plt.title('WHITE using covariance type: '+cv_type)
 # plt.show()
-
-plt.scatter(normalized_x_red[:,2], normalized_x_red[:,3], c='#050505', s=7)
-plt.scatter(centroids[:,2], centroids[:,3], marker='*', label='centroids', s=200, c='g')
-plt.legend()
-plt.ylabel('feature 2')
-plt.xlabel('feature 3')
-plt.show()
-
-plt.scatter(normalized_x_red[:,2], normalized_x_red[:,3], c=labels, s=7)
-plt.scatter(centroids[:,2], centroids[:,3], marker='*', label='centroids', s=200, c='g')
-plt.legend()
-plt.ylabel('feature 2')
-plt.xlabel('feature 3')
-plt.show()
-# plt.scatter(normalized_x_red[:,3], normalized_x_red[:,5], c=labels, s=7)
-# plt.scatter(centroids[:,3], centroids[:,5], marker='*', label='centroids', s=200, c='g')
+#
+# plt.scatter(normalized_x_red[:,2], normalized_x_red[:,3], c='#050505', s=7)
+# plt.scatter(centroids[:,2], centroids[:,3], marker='*', label='centroids', s=200, c='g')
 # plt.legend()
-# plt.ylabel('feature 3')
-# plt.xlabel('feature 5')
-# # plt.title('WHITE using covariance type: '+cv_type)
+# plt.ylabel('feature 2')
+# plt.xlabel('feature 3')
+# plt.show()
+#
+# fig = plt.figure()
+# ax = Axes3D(fig)
+# ax.scatter(normalized_x_red[:,2], normalized_x_red[:,3], normalized_x_red[:,5])
+# ax.scatter(centroids[:, 2], centroids[:, 3], centroids[:, 5], marker='*', label='centroids', c='#050505', s=5000)
+# ax.set_xlabel('feature 2')
+# ax.set_ylabel('feature 3')
+# ax.set_zlabel('feature 5')
+# plt.legend()
 # plt.show()
 
-fig = plt.figure()
-ax = Axes3D(fig)
-ax.scatter(normalized_x_red[:,2], normalized_x_red[:,3], normalized_x_red[:,5])
-ax.scatter(centroids[:, 2], centroids[:, 3], centroids[:, 5], marker='*', label='centroids', c='#050505', s=5000)
-# ax.show()
-# print(gmx.means_)
-plt.show()
 # km[i].means_ : # clusters x # features
 # km[i].covariances_ : # clusters x # features x # features
 """red"""
