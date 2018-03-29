@@ -11,6 +11,7 @@ import numpy as np
 import sys
 from sklearn import linear_model
 from sklearn import metrics
+from sklearn import preprocessing
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
 
@@ -41,4 +42,6 @@ if not run_infile:
     print('Multinomial Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_lr_fit.predict(test_x))))
     print('CV-prediction error rate :: {}'.format(cross_val_score(lr, data[data_features[:10]], data[data_features[11]], cv=10)))
 else:
-    print(cross_val_score(mul_lr, data[data_features[:10]], data[data_features[11]], cv=10))
+    x_fit = preprocessing.StandardScaler().fit(data[data_features[0:11]])
+    data_x = x_fit.transform(data[data_features[0:11]])
+    print(cross_val_score(mul_lr, data_x, data["eval"], cv=10))

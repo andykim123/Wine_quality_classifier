@@ -21,11 +21,11 @@ run_infile = sys.argv[2]
 
 data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"]
 data = pd.read_csv(DATASET_PATH,names=data_features)
-clf = svm.LinearSVC();
+# clf = svm.LinearSVC();
 # clf = svm.SVC(decision_function_shape='ovo',kernel='linear') #~0.5-0.63
 # clf = svm.SVC(decision_function_shape='ovo',kernel='poly',degree=2,coef0=10) #~0.48-0.62
-# clf = svm.SVC(decision_function_shape='ovo',kernel='rbf', gamma=4) #~0.42-0.46
-# clf = svm.SVC(decision_function_shape='ovo',kernel='sigmoid', coef0=20) #~0.42
+clf = svm.SVC(decision_function_shape='ovo',kernel='rbf', gamma=0.1) #~0.42-0.46
+# clf = svm.SVC(decision_function_shape='ovo',kernel='sigmoid', coef0=0.01) #~0.42
 
 run_infile = False
 
@@ -40,32 +40,38 @@ if not run_infile:
     clf_fit = clf.fit(train_x,train_y)
     print('SVM Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf_fit.predict(train_x))))
     print('SVM Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_fit.predict(test_x))))
-    print('SVM Multinomial CV-prediction error rate :: {}'.format(cross_val_score(clf, data[data_features[:10]], data[data_features[11]], cv=10)))
+    data_x = data[data_features[0:11]]
+    x_fit_cv = preprocessing.StandardScaler().fit(data_x)
+    data_x_normal = x_fit_cv.transform(data_x)
+    cv_result = cross_val_score(clf, data_x_normal, data["eval"], cv=10)
+    print('SVM Multinomial CV-prediction error rate :: {}'.format(cv_result))
+    print('SVM Multinomial CV-prediction error mean :: {}'.format(np.mean(cv_result)))
+    print('SVM Multinomial CV-prediction error variance :: {}'.format(np.var(cv_result)))
     # data set modification to 3-class classification. one for 3/4, one for 5/6, one for 7/8
-    mask = (2 < train_y) & (train_y < 5)
-    train_y[mask] = 0
-    mask = (4 < train_y) & (train_y < 7)
-    train_y[mask] = 1
-    mask = (6 < train_y) & (train_y < 9)
-    train_y[mask] = 2
-    mask = (2 < test_y) & (test_y < 5)
-    test_y[mask] = 0
-    mask = (4 < test_y) & (test_y < 7)
-    test_y[mask] = 1
-    mask = (6 < test_y) & (test_y < 9)
-    test_y[mask] = 2
-    cv_x = data[data_features[:10]]
-    cv_y = data[data_features[11]]
-    mask = (2 < cv_y) & (cv_y < 5)
-    cv_y[mask] = 0
-    mask = (4 < cv_y) & (cv_y < 7)
-    cv_y[mask] = 1
-    mask = (6 < cv_y) & (cv_y < 9)
-    cv_y[mask] = 2
-    clf_fit = clf.fit(train_x,train_y)
-    print('SVM 3-class Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf_fit.predict(train_x))))
-    print('SVM 3-class Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_fit.predict(test_x))))
-    print('3-class CV-prediction error rate :: {}'.format(cross_val_score(clf, cv_x, cv_y, cv=10)))
+    # mask = (2 < train_y) & (train_y < 5)
+    # train_y[mask] = 0
+    # mask = (4 < train_y) & (train_y < 7)
+    # train_y[mask] = 1
+    # mask = (6 < train_y) & (train_y < 9)
+    # train_y[mask] = 2
+    # mask = (2 < test_y) & (test_y < 5)
+    # test_y[mask] = 0
+    # mask = (4 < test_y) & (test_y < 7)
+    # test_y[mask] = 1
+    # mask = (6 < test_y) & (test_y < 9)
+    # test_y[mask] = 2
+    # cv_x = data[data_features[:10]]
+    # cv_y = data[data_features[11]]
+    # mask = (2 < cv_y) & (cv_y < 5)
+    # cv_y[mask] = 0
+    # mask = (4 < cv_y) & (cv_y < 7)
+    # cv_y[mask] = 1
+    # mask = (6 < cv_y) & (cv_y < 9)
+    # cv_y[mask] = 2
+    # clf_fit = clf.fit(train_x,train_y)
+    # print('SVM 3-class Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf_fit.predict(train_x))))
+    # print('SVM 3-class Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_fit.predict(test_x))))
+    # print('3-class CV-prediction error rate :: {}'.format(cross_val_score(clf, cv_x, cv_y, cv=10)))
 else:
 	#if the run in done within modelEvaluation.py, we just return cross_val_score result, which is a list of 10 different float-type accuracies
     x_fit = preprocessing.StandardScaler().fit(data[data_features[0:11]])

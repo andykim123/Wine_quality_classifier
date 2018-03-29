@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import sys
 from sklearn import metrics
+from sklearn import preprocessing
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
 from sklearn import gaussian_process
@@ -158,7 +159,8 @@ if not run_infile:
     # =============================================================================
 else:
     #if the run in done within modelEvaluation.py, we just return cross_val_score result, which is a list of 10 different float-type accuracies
-    mul_gp = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_rest').fit(train_x, train_y)
-    cv = cross_val_score(mul_gp, data1[data_features[0:11]], data1["eval"], cv=10)
-    print(cross_val_score(mul_gp, data1[data_features[0:11]], data1["eval"], cv=10))
+    x_fit = preprocessing.StandardScaler().fit(data1[data_features[0:11]])
+    data_x = x_fit.transform(data1[data_features[0:11]])
+    mul_gp = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_one')
+    print(cross_val_score(mul_gp, data_x, data1["eval"], cv=10))
     # print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv.mean(), cv.std() * 2))
