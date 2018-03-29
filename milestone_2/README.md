@@ -8,21 +8,26 @@ The program takes two user inputs for dataset paths of red and white wine datase
 
 ---
 ### Include files
+* __*clustering.py*__: Clusters dataset into 8 clusters
+* __*gmm.py*__: Gaussian Mixture Model, produces probability density functions for k-clusters
 * __*GP.py*__ : Multiclass classification - used built-in function and newton-cg as solver
-* __*modelEvaluation.py*__: Binary classification - used built-in function on binary classified wine datasets
-* __*decisionTree.py*__: Decision Tree
-* ***decisionTreeBagging.py***: Decision Tree with Bagging
-* __*randomForest.py*__: Random Forest
-* __*adaboost.py*__: Adaboost
+* __*modelEvaluation.py*__: Uses t-test to compare two models
+* __*kernelSVM.py*__: Uses RBF kernel with gamma=0.1 to model support vector machine
+
+__Refer to milstone 1 for..__  
+* __*adaBoost.py*__
+* __*decisionTree*__
+* __*MultinomialLogRegression.py*__
+* __*randomForest.py*__
+
 ### Usage      
 
 ```
->> python LogisticRegression.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
->> python LogisticRegression.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
->> python decisionTree.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
->> python decisionTree_bagging.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
->> python randomForest.py <DATASET_PATH_RED> <DATASET_PATH_WHITE> <n_estimator>
->> python adaBoost.py <DATASET_PATH_RED> <DATASET_PATH_WHITE> n_estimator
+>> python clustering.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
+>> python gmm.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
+>> python GP.py <DATASET_PATH_RED> OPTIONAL(<TEXT_DATA_PATH>) <RUN INFILE BOOLEAN>
+>> python modelEvaluation.py <NAME OF MODEL 1 FILE> <NAME OF MODEL 2 FILE> <DATASET_PATH>
+>> python kernelSVM.py <DATASET_PATH_RED> <RUN INFILE BOOLEAN>
 ```
 
 ### Resources used
