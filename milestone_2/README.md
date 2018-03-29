@@ -1,26 +1,36 @@
 Milestone 2
 ===========
 
-Folders
--------
+WUSTL SP18 CSE517 Machine Learning  
+Application Project 
+The program takes two user inputs for dataset paths of red and white wine datasets. 
 
-Each milestone folder should include the following
 
-* All code you wrote/used
-* A README file
+---
+### Include files
+* __*GP.py*__ : Multiclass classification - used built-in function and newton-cg as solver
+* __*modelEvaluation.py*__: Binary classification - used built-in function on binary classified wine datasets
+* __*decisionTree.py*__: Decision Tree
+* ***decisionTreeBagging.py***: Decision Tree with Bagging
+* __*randomForest.py*__: Random Forest
+* __*adaboost.py*__: Adaboost
+### Usage      
 
-They should not include
+```
+>> python LogisticRegression.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
+>> python LogisticRegression.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
+>> python decisionTree.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
+>> python decisionTree_bagging.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
+>> python randomForest.py <DATASET_PATH_RED> <DATASET_PATH_WHITE> <n_estimator>
+>> python adaBoost.py <DATASET_PATH_RED> <DATASET_PATH_WHITE> n_estimator
+```
 
-* Datasets
-* Large packages
-
-README
-------
-
-The README file should include
-
-* Description of what your team did
-* Methods used to accomplish each part
-* Potential difficulties faced
-* Resources used
-* Description of how to run the code in the folder
+### Resources used
+* [Scikit Learn](http://scikit-learn.org/stable/)
+* "Wine Quality" dataset imported from [UCI data repository](http://archive.ics.uci.edu/ml/datasets.html)
+### Authors:
+* Jae Sang Ha
+* Ryun Han
+* Andy Dohoon Kim
+* Nigel Kim
+* Annie Lee
