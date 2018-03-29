@@ -31,13 +31,27 @@ data_red = pd.read_csv(DATASET_PATH_RED,names=data_features)
 data_white = pd.read_csv(DATASET_PATH_WHITE,names=data_features)
 test_x_red = data_red[data_features[0:11]]
 test_x_red_23 = data_red[data_features[1:3]]
+test_x_red_35 = [data_red[data_features[2:3]], data_red[data_features[4:5]]]
+test_x_red_35 = pd.concat(test_x_red_35, axis=1)
+test_x_red_25 = [data_red[data_features[1:2]], data_red[data_features[4:5]]]
+test_x_red_25 = pd.concat(test_x_red_25, axis=1)
 # print(test_x_red_35)
 test_y_red = data_red["eval"]
 test_x_white = data_white[data_features[0:11]]
 test_y_white = data_white["eval"]
+test_x_white_23 = data_white[data_features[1:3]]
+test_x_white_35 = [data_white[data_features[2:3]], data_white[data_features[4:5]]]
+test_x_white_35 = pd.concat(test_x_white_35, axis=1)
+test_x_white_25 = [data_white[data_features[1:2]], data_white[data_features[4:5]]]
+test_x_white_25 = pd.concat(test_x_white_25, axis=1)
 normalized_x_red = StandardScaler().fit_transform(test_x_red)
 normalized_x_red_23 = StandardScaler().fit_transform(test_x_red_23)
+normalized_x_red_35 = StandardScaler().fit_transform(test_x_red_35)
+normalized_x_red_25 = StandardScaler().fit_transform(test_x_red_25)
 normalized_x_white = StandardScaler().fit_transform(test_x_white)
+normalized_x_white_23 = StandardScaler().fit_transform(test_x_white_23)
+normalized_x_white_35 = StandardScaler().fit_transform(test_x_white_35)
+normalized_x_white_25 = StandardScaler().fit_transform(test_x_white_25)
 """
 'full' (each component has its own general covariance matrix),
 'tied' (all components share the same general covariance matrix),
@@ -78,17 +92,27 @@ def plot_gmm(gmm, X, label=True, ax=None):
     ax = ax or plt.gca()
     labels = gmm.fit(X).predict(X)
     centroids = gmm.means_
-    print(X[:,1])
+    # print(X[:,1])
     if label:
-        ax.scatter(X[:, 0], X[:, 1], c=labels, s=40, cmap='viridis', zorder=2)
+        # ax.scatter(X[:, 0], X[:, 1], c=labels, s=40, cmap='viridis', zorder=2)
         ax.scatter(centroids[:,0], centroids[:,1], marker='*', s=200, label='centroids', c='g')
     else:
         ax.scatter(X[:, 0], X[:, 1], s=40, zorder=2)
     ax.axis('equal')
-    ax.set_xlabel('feature 2')
-    ax.set_ylabel('feature 3')
-    ax.set_xlim(-3,6)
-    ax.set_ylim(-2,4)
+    # ax.set_xlabel('volatile acidity')
+    ax.set_xlabel('citric acid')
+    ax.set_ylabel('chlorides')
+    # ax.set_title('red')
+    # ax.set_xlabel('citric acid')
+    # ax.set_ylabel('chlorides')
+    # ax.set_xlim(-3,6)
+    # ax.set_ylim(-2,4)
+    # ax.set_xlim(-7.5,10)
+    # ax.set_ylim(-2,12)
+    # ax.set_xlim(-7.5,12.5)
+    # ax.set_ylim(0,12)
+    ax.set_xlim(-2.5,15)
+    ax.set_ylim(-2,14)
     # ax.set_zlabel('feature 5')
     plt.legend()
 
@@ -96,37 +120,46 @@ def plot_gmm(gmm, X, label=True, ax=None):
     for pos, covar, w in zip(gmm.means_, gmm.covariances_, gmm.weights_):
         draw_ellipse(pos, covar, alpha=w * w_factor)
 gmx = GaussianMixture(n_components=8, covariance_type='full', random_state=42)
-gmx_23 = GaussianMixture(n_components=8, covariance_type='full', random_state=42)
 # gmx = GaussianMixture(n_components=8, covariance_type='diag', random_state=42)
 # gmx = GaussianMixture(n_components=8, covariance_type='tied')
 # gmx = GaussianMixture(n_components=8, covariance_type='spherical')
-plot_gmm(gmx_23, normalized_x_red_23)
+# plot_gmm(gmx_35, normalized_x_red_35)
+# plt.show()
+# plot_gmm(gmx, normalized_x_white_35)
+# plt.show()
+labels = gmx.fit(normalized_x_red).predict(normalized_x_red)
+scores = accuracy_score(test_y_red, labels)
+print(scores)
+centroids = gmx.means_
+fig = plt.figure()
+ax = Axes3D(fig)
+ax.scatter(normalized_x_red[:,2], normalized_x_red[:,3], normalized_x_red[:,5], c=labels, s=40, cmap='viridis', zorder=2)
+ax.scatter(centroids[:, 2], centroids[:, 3], centroids[:, 5], marker='*', label='centroids', c='#050505', s=5000)
+ax.set_xlabel('volatile acidity')
+ax.set_ylabel('citric acid')
+ax.set_zlabel('chlorides')
+ax.set_xlim(-2,4)
+ax.set_ylim(-2,10)
+ax.set_zlim(-2,6)
+plt.legend()
 plt.show()
-# labels = gmx.fit(normalized_x_red).predict(normalized_x_red)
-# centroids = gmx.means_
-# plt.scatter(normalized_x_red[:, 0], normalized_x_red[:, 1], c=labels, s=40, cmap='viridis', zorder=2)
-# plt.scatter(centroids[:,0], centroids[:,1], marker='*', s=200, label='centroids', c='g')
-# plt.legend()
-# plt.ylabel('feature 0')
-# plt.xlabel('feature 1')
-# plt.show()
-#
-# plt.scatter(normalized_x_red[:,2], normalized_x_red[:,3], c='#050505', s=7)
-# plt.scatter(centroids[:,2], centroids[:,3], marker='*', label='centroids', s=200, c='g')
-# plt.legend()
-# plt.ylabel('feature 2')
-# plt.xlabel('feature 3')
-# plt.show()
-#
-# fig = plt.figure()
-# ax = Axes3D(fig)
-# ax.scatter(normalized_x_red[:,2], normalized_x_red[:,3], normalized_x_red[:,5])
-# ax.scatter(centroids[:, 2], centroids[:, 3], centroids[:, 5], marker='*', label='centroids', c='#050505', s=5000)
-# ax.set_xlabel('feature 2')
-# ax.set_ylabel('feature 3')
-# ax.set_zlabel('feature 5')
-# plt.legend()
-# plt.show()
+
+labels = gmx.fit(normalized_x_white).predict(normalized_x_white)
+scores = accuracy_score(test_y_white, labels)
+print(scores)
+centroids = gmx.means_
+fig2 = plt.figure()
+ax = Axes3D(fig2)
+ax.scatter(normalized_x_white[:,2], normalized_x_white[:,3], normalized_x_white[:,5], c=labels, s=40, cmap='viridis', zorder=2)
+ax.scatter(centroids[:, 2], centroids[:, 3], centroids[:, 5], marker='*', label='centroids', c='#050505', s=5000)
+ax.set_xlabel('volatile acidity')
+ax.set_ylabel('citric acid')
+ax.set_zlabel('chlorides')
+ax.set_xlim(-4,12)
+ax.set_ylim(-2,12)
+ax.set_zlim(-2.5,15)
+plt.legend()
+plt.show()
 
 # km[i].means_ : # clusters x # features
 # km[i].covariances_ : # clusters x # features x # features
