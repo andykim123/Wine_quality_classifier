@@ -1,10 +1,12 @@
-from __future__ import absolute_import, division, print_function
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
+import numpy as np
+import tensorflow as tf
 
 import os
 import sys
-import pandas as pd
-import numpy as np
-import tensorflow as tf
 
 try:
     import pandas as pd
@@ -27,15 +29,32 @@ data_white = pd.read_csv(DATASET_PATH_RED,names=data_features)
 print('-------------Red Wine Evaluation-------------')
 np.random.seed(None)
 
-model = tf.estimator.LinearRegressor(feature_columns=data_features)
-
 x_train = data_red.sample(frac=0.7, random_state=None)
 x_test = data_red.drop(x_train.index)
 
-print(x_train)
-print(x_test)
+y_train = x_train.pop("eval")
+y_test = x_test.pop("eval")
 
-x_train.shuffle(1000).batch(128).repeat().make_one_shot_iterator().get_next()
+train = (x_train, y_train)
+test = (x_test, y_test)
 
-print(train)
-print(test)
+dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+
+train = dataset.shuffle(1000).batch(128).repeat().make_one_shot_iterator().get_next()
+
+feature_columns = [tf.feature_column.numeric_column(key="fa"),
+                   tf.feature_column.numeric_column(key="va"),
+                   tf.feature_column.numeric_column(key="ca"),
+                   tf.feature_column.numeric_column(key="rs"),
+                   tf.feature_column.numeric_column(key="ch"),
+                   tf.feature_column.numeric_column(key="fsd"),
+                   tf.feature_column.numeric_column(key="tsd"),
+                   tf.feature_column.numeric_column(key="dens"),
+                   tf.feature_column.numeric_column(key="pH"),
+                   tf.feature_column.numeric_column(key="sulp"),
+                   tf.feature_column.numeric_column(key="alcohol"),
+                   tf.feature_column.numeric_column(key="eval"),
+                   ]
+
+model = tf.estimator.LinearRegressor(feature_columns=data_features)
+#model.train(input_fn=train, steps=1000)
