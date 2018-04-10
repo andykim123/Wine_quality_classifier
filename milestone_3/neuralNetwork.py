@@ -6,19 +6,11 @@ import pandas as pd
 import numpy as np
 import tensorflow as tf
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 try:
     import pandas as pd
 except ImportError:
     pass
 
-
-=======
->>>>>>> parent of 765eabb... split test and train
-=======
->>>>>>> parent of 765eabb... split test and train
 def validate_cmdline_args(nargs, msg):
     if len(sys.argv) < nargs:
         print(msg)
@@ -33,9 +25,6 @@ data_white = pd.read_csv(DATASET_PATH_RED,names=data_features)
 
                             ## Red Wine ##
 print('-------------Red Wine Evaluation-------------')
-
-<<<<<<< HEAD
-<<<<<<< HEAD
 np.random.seed(None)
 
 model = tf.estimator.LinearRegressor(feature_columns=data_features)
@@ -50,10 +39,6 @@ train = (x_train, y_train)
 test = (x_test, y_test)
 
 train.shuffle(1000).batch(128).repeat().make_one_shot_iterator().get_next()
-=======
->>>>>>> parent of 765eabb... split test and train
-=======
->>>>>>> parent of 765eabb... split test and train
 
 print(train)
 print(test)
