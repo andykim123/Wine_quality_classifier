@@ -7,11 +7,10 @@ import collections
 import sys
 import numpy as np
 import tensorflow as tf
-from sklearn.model_selection import train_test_split
 
 
 try:
-    import pandas as pd  # pylint: disable=g-import-not-at-top
+    import pandas as pd
 except ImportError:
     pass
 
