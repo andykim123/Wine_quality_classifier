@@ -7,6 +7,8 @@ import collections
 import sys
 import numpy as np
 import tensorflow as tf
+from sklearn.model_selection import train_test_split
+
 
 try:
     import pandas as pd  # pylint: disable=g-import-not-at-top
@@ -31,7 +33,10 @@ print('-------------Red Wine Evaluation-------------')
 
 np.random.seed(None)
 
+model = tf.estimator.LinearRegressor(feature_columns=data_features)
+
 x_train = data_red.sample(frac=0.7, random_state=None)
+y_train = x_train.pop("eval")
 x_test = data_red.drop(x_train.index)
 y_train = x_train.pop("eval")
 y_test = x_test.pop("eval")
@@ -43,4 +48,3 @@ train.shuffle(1000).batch(128).repeat().make_one_shot_iterator().get_next()
 
 print(train)
 print(test)
-
