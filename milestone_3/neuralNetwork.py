@@ -107,10 +107,10 @@ feature_columns = [tf.feature_column.numeric_column(key="fa"),
 
 model = tf.estimator.LinearRegressor(feature_columns=feature_columns)
 model.train(input_fn=input_train, steps=1000)
-
 eval_result = model.evaluate(input_fn=input_test)
+print(eval_result)
 average_loss = eval_result["average_loss"]
-
+print(average_loss)
 # Convert MSE to Root Mean Square Error (RMSE).
 print("\n" + 80 * "*")
 print("\nRMS error for the test set: {:.0f}"
