@@ -113,36 +113,6 @@ def dataset(y_name="eval", train_fraction=0.7):
   test = (base_dataset.filter(in_test_set).cache().map(decode_line))
 
   return train, test
-def raw_dataframe():
-  """Load the imports85 data as a pd.DataFrame."""
-  # Download and cache the data
-  DATASET_PATH_RED = sys.argv[1]
-
-  # Load it into a pandas dataframe
-  # df = pd.read_csv(path, names=types.keys(), dtype=types, na_values="?")
-  data_red = pd.read_csv(DATASET_PATH_RED,names=types.keys(), dtype=types, na_values="?")
-  return data_red
-
-
-def load_data(y_name="eval", train_fraction=0.7, seed=None):
-  # Load the raw data columns.
-  data = raw_dataframe()
-
-  # Delete rows with unknowns
-  data = data.dropna()
-
-  # Shuffle the data
-  np.random.seed(seed)
-
-  # Split the data into train/test subsets.
-  x_train = data.sample(frac=train_fraction, random_state=seed)
-  x_test = data.drop(x_train.index)
-
-  # Extract the label from the features dataframe.
-  y_train = x_train.pop(y_name)
-  y_test = x_test.pop(y_name)
-
-  return (x_train, y_train), (x_test, y_test)
 
 def to_thousands(features, labels):
     return features, labels / 1000
