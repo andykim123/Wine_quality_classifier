@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import sys
+import time
 from sklearn import svm
 from sklearn import metrics
 from sklearn import preprocessing
@@ -37,9 +38,15 @@ if not run_infile:
     x_fit = preprocessing.StandardScaler().fit(train_x)
     train_x = x_fit.transform(train_x)
     test_x = x_fit.transform(test_x)
+    trainStartTime = time.time()
     clf_fit = clf.fit(train_x,train_y)
+    trainTime = time.time() - trainStartTime
+    trainTestStartTime = time.time()
     print('SVM Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf_fit.predict(train_x))))
+    trainTestTime = time.time() - trainTestStartTime
+    testTestStartTime = time.time()
     print('SVM Multinomial Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_fit.predict(test_x))))
+    testTestTime = time.time() - testTestStartTime
     data_x = data[data_features[0:11]]
     x_fit_cv = preprocessing.StandardScaler().fit(data_x)
     data_x_normal = x_fit_cv.transform(data_x)
@@ -47,6 +54,9 @@ if not run_infile:
     print('SVM Multinomial CV-prediction error rate :: {}'.format(cv_result))
     print('SVM Multinomial CV-prediction error mean :: {}'.format(np.mean(cv_result)))
     print('SVM Multinomial CV-prediction error variance :: {}'.format(np.var(cv_result)))
+    print(trainTime)
+    print(trainTestTime)
+    print(testTestTime)
     # data set modification to 3-class classification. one for 3/4, one for 5/6, one for 7/8
     # mask = (2 < train_y) & (train_y < 5)
     # train_y[mask] = 0

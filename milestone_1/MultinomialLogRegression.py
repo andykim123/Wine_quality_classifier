@@ -9,6 +9,7 @@ Created on Sun Feb 11 21:45:18 2018
 import pandas as pd
 import numpy as np
 import sys
+import time
 from sklearn import linear_model
 from sklearn import metrics
 from sklearn.model_selection import cross_val_score
@@ -29,7 +30,9 @@ train_x, test_x, train_y, test_y = train_test_split(data[data_features[:10]],dat
 lr = linear_model.LogisticRegression()
 mul_lr = linear_model.LogisticRegression(multi_class='multinomial', solver='newton-cg')
 lr.fit(train_x, train_y)
+trainStartTime = time.time()
 mul_lr_fit = mul_lr.fit(train_x, train_y)
+trainTime = time.time()-trainStartTime
 
 run_infile = False
 
@@ -38,7 +41,14 @@ if(sys.argv[2]=="true" or sys.argv[2]=="True"):
 
 if not run_infile:
     print('Multinomial Logistic regression Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, mul_lr_fit.predict(train_x))))
+    trainTestStartTime = time.time()
     print('Multinomial Logistic regression Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, mul_lr_fit.predict(test_x))))
+    trainTestTime = time.time() - trainTestStartTime
+    testTestStartTime = time.time()
     print('CV-prediction error rate :: {}'.format(cross_val_score(lr, data[data_features[:10]], data[data_features[11]], cv=10)))
+    testTestTime = time.time()-testTestStartTime
+    print(trainTime)
+    print(trainTestTime)
+    print(testTestTime)
 else:
     print(cross_val_score(mul_lr, data[data_features[:10]], data[data_features[11]], cv=10))

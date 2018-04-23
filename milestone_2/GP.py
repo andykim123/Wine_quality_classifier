@@ -70,90 +70,97 @@ if not run_infile:
     print("\nGP with RBF Kernel\n")
     
     # Multiclass as One-vs-All
-    t1 = time.time()
+#    t1 = time.time()
     #kernel=1.0 * RBF(length_scale=1.0)
-    mul_gp1 = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_rest').fit(train_x, train_y)
+#    mul_gp1 = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_rest').fit(train_x, train_y)
     #print(mul_gp1.predict(train_x))
-    elapsed = time.time() - t1
-    print('Multiclass (1-vs-All) computation time :: %.3f\n' % (elapsed))
-    print('Multiclass (1-vs-All) Gaussian Process Train Accuracy :: %.3f\n' % (metrics.accuracy_score(train_y, mul_gp1.predict(train_x))))
-    print('Multiclass (1-vs-All) Gaussian Process Test Accuracy :: %.3f\n' % (metrics.accuracy_score(test_y, mul_gp1.predict(test_x))))
-    print("Negative Log Likelihood: %.3f\n" % (mul_gp1.log_marginal_likelihood(theta=None)))
+#    elapsed = time.time() - t1
+#    print('Multiclass (1-vs-All) computation time :: %.3f\n' % (elapsed))
+#    print('Multiclass (1-vs-All) Gaussian Process Train Accuracy :: %.3f\n' % (metrics.accuracy_score(train_y, mul_gp1.predict(train_x))))
+#    print('Multiclass (1-vs-All) Gaussian Process Test Accuracy :: %.3f\n' % (metrics.accuracy_score(test_y, mul_gp1.predict(test_x))))
+#    print("Negative Log Likelihood: %.3f\n" % (mul_gp1.log_marginal_likelihood(theta=None)))
     
-    print("Computing 10-fold CV...\n")
-    tcv = time.time()
-    cv_gp1 = cross_val_score(mul_gp1, data1[data_features[0:11]], data1["eval"], cv=10)
-    elapsed = time.time() - tcv
-    print('CV computation time :: %.3f\n' % (elapsed))
+#    print("Computing 10-fold CV...\n")
+#    tcv = time.time()
+#    cv_gp1 = cross_val_score(mul_gp1, data1[data_features[0:11]], data1["eval"], cv=10)
+#    elapsed = time.time() - tcv
+#    print('CV computation time :: %.3f\n' % (elapsed))
     ##print('CV-prediction error rate :: {}'.format(cv_gp1))
     ##mean cv and the 95% confidence interval of the cv's estimate
-    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp1.mean(), cv_gp1.std() * 2))
-    print('---------------------------------------------')  
+#    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)\n" % (cv_gp1.mean(), cv_gp1.std() * 2))
+#    print('---------------------------------------------')  
     
     # Multiclass as One-vs-One
     t2 = time.time()
     #kernel=1.0 * RBF(length_scale=1.0)
     mul_gp2 = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_one').fit(train_x, train_y)
-    elapsed = time.time() - t2
-    print('Multiclass (1-vs-1) computation time :: %.3f\n' % (elapsed))
+    trainTime = time.time() - t2
+#    print('Multiclass (1-vs-1) computation time :: %.3f\n' % (elapsed))
+    trainTestStartTime = time.time()
     print('Multiclass (1-vs-1) Gaussian Process Train Accuracy :: %.3f\n' % (metrics.accuracy_score(train_y, mul_gp2.predict(train_x))))
+    trainTestTime = time.time() - trainTestStartTime
+    testTestStartTime = time.time()
     print('Multiclass (1-vs-1) Gaussian Process Test Accuracy :: %.3f\n' % (metrics.accuracy_score(test_y, mul_gp2.predict(test_x))))
-    print("Negative Log Likelihood: %.3f\n" % (mul_gp1.log_marginal_likelihood(theta=None)))
+    testTestTime = time.time() - testTestStartTime
+    print(trainTime)
+    print(trainTestTime)
+    print(testTestTime)
+#    print("Negative Log Likelihood: %.3f\n" % (mul_gp1.log_marginal_likelihood(theta=None)))
     
-    print("Computing 10-fold CV...\n")
-    tcv = time.time()
-    cv_gp2 = cross_val_score(mul_gp2, data1[data_features[0:11]], data1["eval"], cv=10)
-    elapsed = time.time() - tcv
-    print('CV computation time :: %.3f\n' % (elapsed))
+#    print("Computing 10-fold CV...\n")
+#    tcv = time.time()
+#    cv_gp2 = cross_val_score(mul_gp2, data1[data_features[0:11]], data1["eval"], cv=10)
+#    elapsed = time.time() - tcv
+#    print('CV computation time :: %.3f\n' % (elapsed))
     #print('CV-prediction error rate :: {}'.format(cv_gp2))
     #mean cv and the 95% confidence interval of the cv's estimate
-    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv_gp2.mean(), cv_gp2.std() * 2))
-    print('---------------------------------------------') 
+#    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv_gp2.mean(), cv_gp2.std() * 2))
+#    print('---------------------------------------------') 
     # =============================================================================
      # GP with Matern Kernel
-    print("")
-    print("\nGP with Matern Kernel\n") 
+#    print("")
+#    print("\nGP with Matern Kernel\n") 
     
     # Multiclass as One-vs-All
-    t1 = time.time()
-    mul_gp1 = gaussian_process.GaussianProcessClassifier(kernel=1.0*Matern(length_scale=1.0, nu=1.5), multi_class='one_vs_rest').fit(train_x, train_y)
-    elapsed = time.time() - t1
-    print('Multiclass (1-vs-All) computation time :: %.3f\n' % (elapsed))
+#    t1 = time.time()
+#    mul_gp1 = gaussian_process.GaussianProcessClassifier(kernel=1.0*Matern(length_scale=1.0, nu=1.5), multi_class='one_vs_rest').fit(train_x, train_y)
+#    elapsed = time.time() - t1
+#    print('Multiclass (1-vs-All) computation time :: %.3f\n' % (elapsed))
     
-    print('Multiclass (1-vs-All) Gaussian Process Train Accuracy :: %.3f\n' % (metrics.accuracy_score(train_y, mul_gp1.predict(train_x))))
-    print('Multiclass (1-vs-All) Gaussian Process Test Accuracy :: %.3f\n' % (metrics.accuracy_score(test_y, mul_gp1.predict(test_x))))
-    print("Negative Log Likelihood: %.3f\n" % (mul_gp1.log_marginal_likelihood(theta=[math.log(1), math.log(1)])))
+#    print('Multiclass (1-vs-All) Gaussian Process Train Accuracy :: %.3f\n' % (metrics.accuracy_score(train_y, mul_gp1.predict(train_x))))
+#    print('Multiclass (1-vs-All) Gaussian Process Test Accuracy :: %.3f\n' % (metrics.accuracy_score(test_y, mul_gp1.predict(test_x))))
+#    print("Negative Log Likelihood: %.3f\n" % (mul_gp1.log_marginal_likelihood(theta=[math.log(1), math.log(1)])))
     
-    print("Computing 10-fold CV...\n")
-    tcv = time.time()
-    cv_gp1 = cross_val_score(mul_gp1, data1[data_features[0:11]], data1["eval"], cv=10)
-    elapsed = time.time() - tcv
-    print('CV computation time :: %.3f\n' % (elapsed))
+#    print("Computing 10-fold CV...\n")
+#    tcv = time.time()
+#    cv_gp1 = cross_val_score(mul_gp1, data1[data_features[0:11]], data1["eval"], cv=10)
+#    elapsed = time.time() - tcv
+#    print('CV computation time :: %.3f\n' % (elapsed))
     #print('CV-prediction error rate :: {}'.format(cv_gp1))
     #mean cv and the 95% confidence interval of the cv's estimate
-    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv_gp1.mean(), cv_gp1.std() * 2))
-    print('---------------------------------------------') 
+#    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv_gp1.mean(), cv_gp1.std() * 2))
+#    print('---------------------------------------------') 
     
     # Multiclass as One-vs-One
-    t2 = time.time()
-    mul_gp2 = gaussian_process.GaussianProcessClassifier(kernel=1.0 * Matern(length_scale=1.0, length_scale_bounds=(1e-1, 10.0),
-                            nu=1.5), multi_class='one_vs_one').fit(train_x, train_y)
-    elapsed = time.time() - t2
-    print('Multiclass (1-vs-1) computation time :: %.3f\n' % (elapsed))
+#    t2 = time.time()
+#    mul_gp2 = gaussian_process.GaussianProcessClassifier(kernel=1.0 * Matern(length_scale=1.0, length_scale_bounds=(1e-1, 10.0),
+#                            nu=1.5), multi_class='one_vs_one').fit(train_x, train_y)
+#    elapsed = time.time() - t2
+#    print('Multiclass (1-vs-1) computation time :: %.3f\n' % (elapsed))
     
-    print('Multiclass (1-vs-1) Gaussian Process Train Accuracy :: %.3f\n' % (metrics.accuracy_score(train_y, mul_gp2.predict(train_x))))
-    print('Multiclass (1-vs-1) Gaussian Process Test Accuracy :: %.3f\n' % (metrics.accuracy_score(test_y, mul_gp2.predict(test_x))))
-    print("Negative Log Likelihood: %.3f\n" % (mul_gp1.log_marginal_likelihood(theta=[math.log(1), math.log(1)])))
+#    print('Multiclass (1-vs-1) Gaussian Process Train Accuracy :: %.3f\n' % (metrics.accuracy_score(train_y, mul_gp2.predict(train_x))))
+#    print('Multiclass (1-vs-1) Gaussian Process Test Accuracy :: %.3f\n' % (metrics.accuracy_score(test_y, mul_gp2.predict(test_x))))
+#    print("Negative Log Likelihood: %.3f\n" % (mul_gp1.log_marginal_likelihood(theta=[math.log(1), math.log(1)])))
     
-    print("Computing 10-fold CV...")
-    tcv = time.time()
-    cv_gp2 = cross_val_score(mul_gp2, data1[data_features[0:11]], data1["eval"], cv=10)
-    elapsed = time.time() - tcv
-    print('CV computation time :: %.3f\n' % (elapsed))
+#    print("Computing 10-fold CV...")
+#    tcv = time.time()
+#    cv_gp2 = cross_val_score(mul_gp2, data1[data_features[0:11]], data1["eval"], cv=10)
+#    elapsed = time.time() - tcv
+#    print('CV computation time :: %.3f\n' % (elapsed))
     #print('CV-prediction error rate :: {}'.format(cv_gp2))
     #mean cv and the 95% confidence interval of the cv's estimate
-    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv_gp2.mean(), cv_gp2.std() * 2))
-    print('---------------------------------------------') 
+#    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv_gp2.mean(), cv_gp2.std() * 2))
+#    print('---------------------------------------------') 
     #print("Log-loss: %.3f" % (log_loss(train_y, mul_gp2.predict_proba(train_x)[:, 1])))
     
     # =============================================================================
