@@ -101,10 +101,10 @@ if str(specify) == "y":
 	for i in range (0, int(var)):
 		nodes = input("Layer " + str(i+1) + " num nodes: ")
 		hidden_layers.append(nodes)
-		print("running DNN with hidden units " + str(hidden_layers) + " ...")
 else:
 	hidden_layers = [4, 4, 4, 4, 4]
-	print("running DNN with default hidden units " + str(hidden_layers) + " ...")
+
+print("running DNN with hidden units " + str(hidden_layers) + " ...")
 
 
 						## Red Wine ##
@@ -112,7 +112,7 @@ else:
 train = train.map(to_thousands)
 test = test.map(to_thousands)
 
-model = tf.estimator.DNNRegressor(hidden_units=hidden_layers, feature_columns=feature_columns)
+model = tf.estimator.DNNRegressor(hidden_units=hidden_layers, feature_columns=feature_columns, activation_fn=tf.nn.sigmoid)
 model.train(input_fn=input_train, steps=1000)
 eval_result = model.evaluate(input_fn=input_test)
 
@@ -127,10 +127,10 @@ print("RMS error for the test set: {:.0f}".format(1000 * eval_result["average_lo
 train = train.map(to_thousands)
 test = test.map(to_thousands)
 
-model = tf.estimator.DNNRegressor(hidden_units=hidden_layers, feature_columns=feature_columns)
+model = tf.estimator.DNNRegressor(hidden_units=hidden_layers, feature_columns=feature_columns, activation_fn=tf.nn.sigmoid)
 model.train(input_fn=input_train, steps=1000)
 eval_result = model.evaluate(input_fn=input_test)
 print("\nWhite wine loss: "+str(eval_result["loss"]))
 print("White wine average loss: "+str(eval_result["average_loss"]))
 print("RMS error for the test set: {:.0f}".format(1000 * eval_result["average_loss"]**0.5))
-print(80 * "*" + "\n")
+print(71 * "*" + "\n")

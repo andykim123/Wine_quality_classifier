@@ -101,14 +101,14 @@ train = train.map(to_thousands)
 test = test.map(to_thousands)
 
 model = tf.estimator.LinearRegressor(feature_columns=feature_columns)
-model.train(input_fn=input_train, steps=1000)
+model.train(input_fn=input_train, steps=1500)
 eval_result = model.evaluate(input_fn=input_test)
 
 print("\n" + 30 * "*" + "NN RESULTS" + 30 * "*")
 print("Red wine loss: "+str(eval_result["loss"]))
 print("Red wine average loss: "+str(eval_result["average_loss"]))
 # Convert MSE to Root Mean Square Error (RMSE).
-print("RMS error for the test set: {:.0f}".format(1000 * eval_result["average_loss"]**0.5))
+print("RMS error for the test set: {:.0f}".format(1500 * eval_result["average_loss"]**0.5))
 
 						## White Wine ##
 (train, test) = dataset(dataset_path=sys.argv[2])
@@ -116,9 +116,9 @@ train = train.map(to_thousands)
 test = test.map(to_thousands)
 
 model = tf.estimator.LinearRegressor(feature_columns=feature_columns)
-model.train(input_fn=input_train, steps=1000)
+model.train(input_fn=input_train, steps=1500)
 eval_result = model.evaluate(input_fn=input_test)
 print("\nWhite wine loss: "+str(eval_result["loss"]))
 print("White wine average loss: "+str(eval_result["average_loss"]))
-print("RMS error for the test set: {:.0f}".format(1000 * eval_result["average_loss"]**0.5))
-print(80 * "*" + "\n")
+print("RMS error for the test set: {:.0f}".format(1500 * eval_result["average_loss"]**0.5))
+print(70 * "*" + "\n")
