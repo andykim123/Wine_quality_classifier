@@ -1,26 +1,37 @@
 Milestone 3
 ===========
 
-Folders
--------
+WUSTL SP18 CSE517 Machine Learning  
+Application Project
+The program takes two user inputs for dataset paths of red and white wine datasets.
 
-Each milestone folder should include the following
 
-* All code you wrote/used
-* A README file
+---
+### Include files
+* __*DNNregressor.py*__:
+* __*efficiency*__:
+* __*neuralNetwork.py*__ :
+* __*PCA.py*__:
+* __*PCA_documentation.docx*__:
+* __*Efficiency_documentation.docx*__:
+* __*TimeComparison.xlsx*__:
 
-They should not include
 
-* Datasets
-* Large packages
+### Usage      
 
-README
-------
+```
+>> python DNNregressor.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
+>> python neuralNetwork.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>
+>> python PCA.py
+>> python efficiency.py
+```
 
-The README file should include
-
-* Description of what your team did
-* Methods used to accomplish each part
-* Potential difficulties faced
-* Resources used
-* Description of how to run the code in the folder
+### Resources used
+* [Scikit Learn](http://scikit-learn.org/stable/)
+* "Wine Quality" dataset imported from [UCI data repository](http://archive.ics.uci.edu/ml/datasets.html)
+### Authors:
+* Jae Sang Ha
+* Ryun Han
+* Andy Dohoon Kim
+* Nigel Kim
+* Annie Lee
