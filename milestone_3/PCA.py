@@ -8,6 +8,7 @@ Created on Sun Apr 22 22:09:32 2018
 import pandas as pd
 import numpy as np
 import sys
+import csv
 from sklearn import linear_model
 from sklearn import metrics
 from sklearn.model_selection import cross_val_score
@@ -35,26 +36,40 @@ data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcoho
 data_red = pd.read_csv(DATASET_PATH_RED,names=data_features)
 data_white = pd.read_csv(DATASET_PATH_RED,names=data_features)
 
-train_x, test_x, train_y, test_y = train_test_split(data_red[data_features[0:11]],data_red["eval"], train_size=0.7)
-"""normalize the data for PCA"""
-normalized_test = StandardScaler().fit_transform(test_x)
-normalized_train = StandardScaler().fit_transform(train_x)
-"""proof for 8 components with explained variance, 100% of attained variance for 8 components and 90% of attained variance for 6 components"""
-pca = PCA().fit(normalized_train)
-plt.plot(np.cumsum(pca.explained_variance_ratio_))
-plt.xlabel('number of components')
-plt.ylabel('cumulative explained variance');
+#train_x, test_x, train_y, test_y = train_test_split(data_red[data_features[0:11]],data_red["eval"], train_size=0.7)
+#"""normalize the data for PCA"""
+#normalized_test = StandardScaler().fit_transform(test_x)
+#normalized_train = StandardScaler().fit_transform(train_x)
+#"""proof for 8 components with explained variance, 100% of attained variance for 8 components and 90% of attained variance for 6 components"""
+#pca = PCA().fit(normalized_train)
+#plt.plot(np.cumsum(pca.explained_variance_ratio_))
+#plt.xlabel('number of components')
+#plt.ylabel('cumulative explained variance');
 
 """training set and test set with 8 components"""
-pca = PCA(n_components=8)
-pca = pca.fit(normalized_train)
-train_8d = pca.transform(normalized_train)
-test_8d = pca.transform(normalized_test)
-
-"""for CV, PCA on whole dataset"""
 #pca = PCA(n_components=8)
-#normalized_data = StandardScaler().fit_transform(data_red[data_features[0:11]])
-#data_8d = pca.fit_transform(normalized_data)
+#pca = pca.fit(normalized_train)
+#train_8d = pca.transform(normalized_train)
+#test_8d = pca.transform(normalized_test)
+#
+#train_data = pd.DataFrame(data={"f1":train_8d[:,0], "f2":train_8d[:,1], "f3":train_8d[:,2],"f4":train_8d[:,3],"f5":train_8d[:,4],"f6":train_8d[:,5],"f7":train_8d[:,6],"f8":train_8d[:,7],"score":train_y})
+#test_data = pd.DataFrame(data={"f1":test_8d[:,0], "f2":test_8d[:,1], "f3":test_8d[:,2],"f4":test_8d[:,3],"f5":test_8d[:,4],"f6":test_8d[:,5],"f7":test_8d[:,6],"f8":test_8d[:,7],"score":test_y})
+
+
+#train_data.to_csv("/Users/dohoonkim/Desktop/cse517a/ApplicationProject/PCAtrain.csv", sep=',',index=False)
+#test_data.to_csv("/Users/dohoonkim/Desktop/cse517a/ApplicationProject/PCAtest.csv", sep=',',index=False)
+
+#train_pca = pd.read_csv("/Users/dohoonkim/Desktop/cse517a/ApplicationProject/PCAtrain.csv")
+#test_pca = pd.read_csv("/Users/dohoonkim/Desktop/cse517a/ApplicationProject/PCAtest.csv")
+"""for CV, PCA on whole dataset"""
+pca = PCA(n_components=8)
+normalized_data = StandardScaler().fit_transform(data_red[data_features[0:11]])
+data_8d = pca.fit_transform(normalized_data)
+PCA_data = pd.DataFrame(data={"f1":data_8d[:,0], "f2":data_8d[:,1], "f3":data_8d[:,2],"f4":data_8d[:,3],"f5":data_8d[:,4],"f6":data_8d[:,5],"f7":data_8d[:,6],"f8":data_8d[:,7],"score":data_red["eval"]})
+#Save pca version data to csv
+PCA_data.to_csv("/Users/dohoonkim/Desktop/cse517a/ApplicationProject/PCAdata.csv", sep=',',index=False)
+#csv to dataframe
+data_pca = pd.read_csv("/Users/dohoonkim/Desktop/cse517a/ApplicationProject/PCAdata.csv")
 
 """visualization of 2D PCA-components with label outputs"""
 #colors = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'black', 'gray', 'seagreen', 'khaki', 'navy']
