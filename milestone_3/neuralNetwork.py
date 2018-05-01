@@ -60,34 +60,52 @@ def to_thousands(features, labels):
 
 
 # defining dataset object:
+# defaults = collections.OrderedDict([
+#     ("fa", [0.0]),
+#     ("va", [0.0]),
+#     ("ca", [0.0]),
+#     ("rs", [0.0]),
+#     ("ch", [0.0]),
+#     ("fsd", [0.0]),
+#     ("tsd", [0.0]),
+#     ("dens", [0.0]),
+#     ("pH", [0.0]),
+#     ("sulp", [0.0]),
+#     ("alcohol", [0.0]),
+#     ("eval", [0])
+# ])
 defaults = collections.OrderedDict([
-    ("fa", [0.0]),
-    ("va", [0.0]),
-    ("ca", [0.0]),
-    ("rs", [0.0]),
-    ("ch", [0.0]),
-    ("fsd", [0.0]),
-    ("tsd", [0.0]),
-    ("dens", [0.0]),
-    ("pH", [0.0]),
-    ("sulp", [0.0]),
-    ("alcohol", [0.0]),
+    ("f1", [0.0]),
+    ("f2", [0.0]),
+    ("f3", [0.0]),
+    ("f4", [0.0]),
+    ("f5", [0.0]),
+    ("f6", [0.0]),
+    ("f7", [0.0]),
+    ("f8", [0.0]),
     ("eval", [0])
 ])
-
-feature_columns = [tf.feature_column.numeric_column(key="fa"),
-                   tf.feature_column.numeric_column(key="va"),
-                   tf.feature_column.numeric_column(key="ca"),
-                   tf.feature_column.numeric_column(key="rs"),
-                   tf.feature_column.numeric_column(key="ch"),
-                   tf.feature_column.numeric_column(key="fsd"),
-                   tf.feature_column.numeric_column(key="tsd"),
-                   tf.feature_column.numeric_column(key="dens"),
-                   tf.feature_column.numeric_column(key="pH"),
-                   tf.feature_column.numeric_column(key="sulp"),
-                   tf.feature_column.numeric_column(key="alcohol"),
+# feature_columns = [tf.feature_column.numeric_column(key="fa"),
+#                    tf.feature_column.numeric_column(key="va"),
+#                    tf.feature_column.numeric_column(key="ca"),
+#                    tf.feature_column.numeric_column(key="rs"),
+#                    tf.feature_column.numeric_column(key="ch"),
+#                    tf.feature_column.numeric_column(key="fsd"),
+#                    tf.feature_column.numeric_column(key="tsd"),
+#                    tf.feature_column.numeric_column(key="dens"),
+#                    tf.feature_column.numeric_column(key="pH"),
+#                    tf.feature_column.numeric_column(key="sulp"),
+#                    tf.feature_column.numeric_column(key="alcohol"),
+#                    ]
+feature_columns = [tf.feature_column.numeric_column(key="f1"),
+                   tf.feature_column.numeric_column(key="f2"),
+                   tf.feature_column.numeric_column(key="f3"),
+                   tf.feature_column.numeric_column(key="f4"),
+                   tf.feature_column.numeric_column(key="f5"),
+                   tf.feature_column.numeric_column(key="f6"),
+                   tf.feature_column.numeric_column(key="f7"),
+                   tf.feature_column.numeric_column(key="f8"),
                    ]
-
 types = collections.OrderedDict((key, type(value[0]))
                                 for key, value in defaults.items())
 
@@ -110,15 +128,16 @@ print("Red wine average loss: "+str(eval_result["average_loss"]))
 # Convert MSE to Root Mean Square Error (RMSE).
 print("RMS error for the test set: {:.0f}".format(1500 * eval_result["average_loss"]**0.5))
 
-						## White Wine ##
-(train, test) = dataset(dataset_path=sys.argv[2])
-train = train.map(to_thousands)
-test = test.map(to_thousands)
+# 						## White Wine ##
+# (train, test) = dataset(dataset_path=sys.argv[2])
+# train = train.map(to_thousands)
+# test = test.map(to_thousands)
+#
+# model = tf.estimator.LinearRegressor(feature_columns=feature_columns)
+# model.train(input_fn=input_train, steps=1500)
+# eval_result = model.evaluate(input_fn=input_test)
 
-model = tf.estimator.LinearRegressor(feature_columns=feature_columns)
-model.train(input_fn=input_train, steps=1500)
-eval_result = model.evaluate(input_fn=input_test)
-print("\nWhite wine loss: "+str(eval_result["loss"]))
-print("White wine average loss: "+str(eval_result["average_loss"]))
-print("RMS error for the test set: {:.0f}".format(1500 * eval_result["average_loss"]**0.5))
+# print("\nWhite wine loss: "+str(eval_result["loss"]))
+# print("White wine average loss: "+str(eval_result["average_loss"]))
+# print("RMS error for the test set: {:.0f}".format(1500 * eval_result["average_loss"]**0.5))
 print(70 * "*" + "\n")
