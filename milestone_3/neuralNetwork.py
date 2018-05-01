@@ -23,7 +23,7 @@ def validate_cmdline_args(nargs, msg):
         print(msg)
         sys.exit(1)
 
-def dataset(y_name="eval", train_fraction=0.7, dataset_path=""):
+def dataset(y_name="eval", train_fraction=0.9, dataset_path=""):
   path = dataset_path
 
   def decode_line(line):
@@ -92,8 +92,12 @@ types = collections.OrderedDict((key, type(value[0]))
                                 for key, value in defaults.items())
 
 # our code runs here:
-validate_cmdline_args(3,'Usage: python neuralNetwork.py <DATASET_PATH_RED> <DATASET_PATH_WHITE>')
+validate_cmdline_args(3,'Usage: python neuralNetwork.py <DATASET_PATH> <RUN INFILE BOOLEAN>')
 
+run_infile = False
+
+if(sys.argv[2]=="true" or sys.argv[2]=="True"):
+    run_infile = True
 
 						## Red Wine ##
 (train, test) = dataset(dataset_path=sys.argv[1])
@@ -105,20 +109,25 @@ model.train(input_fn=input_train, steps=1500)
 eval_result = model.evaluate(input_fn=input_test)
 
 print("\n" + 30 * "*" + "NN RESULTS" + 30 * "*")
-print("Red wine loss: "+str(eval_result["loss"]))
-print("Red wine average loss: "+str(eval_result["average_loss"]))
+print("Wine loss: "+str(eval_result["loss"]))
+print("Wine average loss: "+str(eval_result["average_loss"]))
 # Convert MSE to Root Mean Square Error (RMSE).
 print("RMS error for the test set: {:.0f}".format(1500 * eval_result["average_loss"]**0.5))
 
-						## White Wine ##
-(train, test) = dataset(dataset_path=sys.argv[2])
-train = train.map(to_thousands)
-test = test.map(to_thousands)
 
-model = tf.estimator.LinearRegressor(feature_columns=feature_columns)
-model.train(input_fn=input_train, steps=1500)
-eval_result = model.evaluate(input_fn=input_test)
-print("\nWhite wine loss: "+str(eval_result["loss"]))
-print("White wine average loss: "+str(eval_result["average_loss"]))
-print("RMS error for the test set: {:.0f}".format(1500 * eval_result["average_loss"]**0.5))
-print(70 * "*" + "\n")
+
+
+
+
+# 						## White Wine ##
+# (train, test) = dataset(dataset_path=sys.argv[2])
+# train = train.map(to_thousands)
+# test = test.map(to_thousands)
+
+# model = tf.estimator.LinearRegressor(feature_columns=feature_columns)
+# model.train(input_fn=input_train, steps=1500)
+# eval_result = model.evaluate(input_fn=input_test)
+# print("\nWhite wine loss: "+str(eval_result["loss"]))
+# print("White wine average loss: "+str(eval_result["average_loss"]))
+# print("RMS error for the test set: {:.0f}".format(1500 * eval_result["average_loss"]**0.5))
+# print(70 * "*" + "\n")

@@ -29,7 +29,7 @@ def validate_data_name(dataname,msg):
 		print(msg)
 		sys.exit(1)
 
-validate_cmdline_args(4,'Usage: python kernelSVM.py <NAME OF MODEL_1 FILE> <NAME OF MODEL_2 FILE> <DATASET_PATH>')
+validate_cmdline_args(4,'Usage: python modelEvaluation.py <NAME OF MODEL_1 FILE> <NAME OF MODEL_2 FILE> <DATASET_PATH>')
 validate_file_names(sys.argv[1],sys.argv[2],"Invalid file name: "+sys.argv[1],"Invalid file name: "+sys.argv[2])
 validate_data_name(sys.argv[3],"Invalid data file name: "+sys.argv[3])
 DATASET_PATH = sys.argv[3]
@@ -42,7 +42,7 @@ list_2 = []
 
 # Set alpha, a type-II error threshold.
 # Usually, it is either 0.1, 0.05, or 0.01
-alpha = 0.005
+alpha = 0.05
 
 # list_2 = random.sample(xrange(100), 10)
 
