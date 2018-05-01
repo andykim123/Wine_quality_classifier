@@ -46,6 +46,38 @@ alpha = 0.05
 
 # list_2 = random.sample(xrange(100), 10)
 
+
+data = pd.read_csv(DATASET_PATH,names=data_features)
+#to_csv("/Users/dohoonkim/Desktop/cse517a/ApplicationProject/PCAdata.csv", sep=',',index=False)
+
+temp_array = DATASET_PATH.split("/")
+RAW_PATH = ""
+
+for i in range(1,len(temp_array)-1):
+    RAW_PATH = RAW_PATH +"/"+temp_array[i]
+
+train_1.to_csv(RAW_PATH+"/train_1")
+train_2.to_csv(RAW_PATH+"/train_2")
+train_3.to_csv(RAW_PATH+"/train_3")
+train_4.to_csv(RAW_PATH+"/train_4")
+train_5.to_csv(RAW_PATH+"/train_5")
+train_6.to_csv(RAW_PATH+"/train_6")
+train_7.to_csv(RAW_PATH+"/train_7")
+train_8.to_csv(RAW_PATH+"/train_8")
+train_9.to_csv(RAW_PATH+"/train_9")
+train_10.to_csv(RAW_PATH+"/train_10")
+
+test_1.to_csv(RAW_PATH+"/test_1")
+test_2.to_csv(RAW_PATH+"/test_2")
+test_3.to_csv(RAW_PATH+"/test_3")
+test_4.to_csv(RAW_PATH+"/test_4")
+test_5.to_csv(RAW_PATH+"/test_5")
+test_6.to_csv(RAW_PATH+"/test_6")
+test_7.to_csv(RAW_PATH+"/test_7")
+test_8.to_csv(RAW_PATH+"/test_8")
+test_9.to_csv(RAW_PATH+"/test_9")
+test_10.to_csv(RAW_PATH+"/test_10")
+
 print("Files to be used:")
 print("Model 1: "+model_1)
 print("Model 2: "+model_2)
@@ -57,17 +89,14 @@ for k in range(0,10):
     # proc = subprocess.Popen(['python', model_1,  DATASET_PATH, "true"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     # print(proc.communicate()[0])
     # for each model, run a process and get the 10 cv results as a to_string format
-    print("        "+model_1+":")
-    proc1 = subprocess.check_output([sys.executable, model_1, DATASET_PATH, "true"])
-    print("        "+model_2+":")
-    proc2 = subprocess.check_output([sys.executable, model_2, DATASET_PATH, "true"])
-    # parse the to_string format into 10 different string values
-    temp_1 = proc1.split("[")[1].split("]")[0].split()
-    temp_2 = proc2.split("[")[1].split("]")[0].split()
-    for x in range(0,len(temp_1)):
-    	# cast those string values into floats
-	    list_1.append(float(temp_1[x]))
-	    list_2.append(float(temp_2[x]))
+    for j in range(0,10):
+        print("        "+model_1+":")
+        proc1 = subprocess.check_output([sys.executable, model_1, RAW_PATH+"/train_"+str(k+1), RAW_PATH+"/test_"+str(k+1), "true"])
+        print("        "+model_2+":")
+        proc2 = subprocess.check_output([sys.executable, model_2, RAW_PATH+"/train_"+str(k+1), RAW_PATH+"/test_"+str(k+1), "true"])
+        # parse the to_string format into 10 different string values
+        list_1.append(float(proc1))
+        list_2.append(float(proc2))
 
 print("Model Calculation Ends")
 print("-----------------------")
