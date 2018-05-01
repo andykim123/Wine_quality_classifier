@@ -16,47 +16,8 @@ from scipy.stats import t
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
-# function that checks the command line arguments
-#def validate_cmdline_args(nargs, msg):
-#    if len(sys.argv) < nargs:
-#        print(msg)
-#        sys.exit(1)
-#
-## function that checks whether the file names are valid with valid file paths
-#def validate_file_names(filename_1,filename_2,msg_1,msg_2):
-#	if not os.path.isfile(filename_1):
-#		print(msg_1)
-#		sys.exit(1)
-#	elif not os.path.isfile(filename_2):
-#		print(msg_2)
-#		sys.exit(1)
-#
-## function that checks whether the data file is valid with valid path
-#def validate_data_name(dataname,msg):
-#	if not os.path.isfile(dataname):
-#		print(msg)
-#		sys.exit(1)
-#
-#validate_cmdline_args(4,'Usage: python kernelSVM.py <NAME OF MODEL_1 FILE> <NAME OF MODEL_2 FILE> <DATASET_PATH>')
-#validate_file_names(sys.argv[1],sys.argv[2],"Invalid file name: "+sys.argv[1],"Invalid file name: "+sys.argv[2])
-#validate_data_name(sys.argv[3],"Invalid data file name: "+sys.argv[3])
-#DATASET_PATH = sys.argv[3]
-#
-#model_1 = sys.argv[1]
-#model_2 = sys.argv[2]
-#
-#list_1 = []
-#list_2 = []
-#
-## Set alpha, a type-II error threshold.
-## Usually, it is either 0.1, 0.05, or 0.01
-alpha = 0.005
-#
-## list_2 = random.sample(xrange(100), 10)
-#
-#print("Files to be used:")
-#print("Model 1: "+model_1)
-#print("Model 2: "+model_2)
+
+alpha = 0.005   # very strict test
 
 # average train/test times for all models
 lr_train_t = [0.399202108,0.401701927,0.426573992,0.420482874,0.336703062,0.387607098,0.346524954,0.373478889,0.35581398,0.379189968]
@@ -107,20 +68,20 @@ for i1 in range(0, len(trainlist)):         #model 1
         print("Comparing "+train(i1).name+" and "+train(i2).name+"\n")
         print("New degree of freedom: "+str(new_df)+"\n")
         print("Test T-Score: "+str(t_score)+"\n")
-        if np.mean(trainlist[i1])>=np.mean(trainlist[i2]):
+        if np.mean(trainlist[i1])<=np.mean(trainlist[i2]):
             compare_t = t.ppf(1-alpha,new_df)
             print("Comparable T-score: "+str(compare_t)+"\n")
             if t_score>=compare_t:
-                print("Significantly, "+train(i1).name+" is better than "+train(i2).name+" / "+train(i1).name+" mean accuracy: "+str(np.mean(trainlist[i1]))+" / "+train(i2).name+" mean accuracy: "+str(np.mean(trainlist[i2]))+"\n")
+                print("Significantly, "+train(i1).name+" is better than "+train(i2).name+" / "+train(i1).name+" mean train time: "+str(np.mean(trainlist[i1]))+" / "+train(i2).name+" mean train time: "+str(np.mean(trainlist[i2]))+"\n")
             else:
-                print("Statistically, no difference detected. But in this sample, "+train(i1).name+"is slightly better. "+train(i1).name+" mean accuracy: "+str(np.mean(trainlist[i1]))+"\n")
+                print("Statistically, no difference detected. But in this sample, "+train(i1).name+"is slightly better.\n"+train(i1).name+" mean train time: "+str(np.mean(trainlist[i1]))+"\n")
         else:
             compare_t = t.ppf(alpha,new_df)
             print("Comparable T-score: "+str(compare_t))
             if t_score>=compare_t:
-                print("Significantly, "+train(i2).name+" is better than "+train(i1).name+" / "+train(i1).name+" mean accuracy: "+str(np.mean(trainlist[i1]))+" / "+train(i2).name+" mean accuracy: "+str(np.mean(trainlist[i2]))+"\n")
+                print("Significantly, "+train(i2).name+" is better than "+train(i1).name+" / "+train(i1).name+" mean train time: "+str(np.mean(trainlist[i1]))+" / "+train(i2).name+" mean train time: "+str(np.mean(trainlist[i2]))+"\n")
             else:
-                print("Statistically, no difference detected. But in this sample, "+train(i2).name+"is slightly better. "+train(i2).name+" mean accuracy: "+str(np.mean(trainlist[i2]))+"\n")
+                print("Statistically, no difference detected. But in this sample, "+train(i2).name+"is slightly better.\n"+train(i2).name+" mean train time: "+str(np.mean(trainlist[i2]))+"\n")
 
 # T test on testing times
 for i1 in range(0, len(testlist)):         #model 1
@@ -130,18 +91,18 @@ for i1 in range(0, len(testlist)):         #model 1
         print("Comparing "+test(i1).name+" and "+test(i2).name+"\n")
         print("New degree of freedom: "+str(new_df)+"\n")
         print("Test T-Score: "+str(t_score)+"\n")
-        if np.mean(testlist[i1])>=np.mean(testlist[i2]):
+        if np.mean(testlist[i1])<=np.mean(testlist[i2]):
             compare_t = t.ppf(1-alpha,new_df)
             print("Comparable T-score: "+str(compare_t)+"\n")
             if t_score>=compare_t:
-                print("Significantly, "+test(i1).name+" is better than "+test(i2).name+" / "+test(i1).name+" mean accuracy: "+str(np.mean(testlist[i1]))+" / "+test(i2).name+" mean accuracy: "+str(np.mean(testlist[i2]))+"\n")
+                print("Significantly, "+test(i1).name+" is better than "+test(i2).name+" / "+test(i1).name+" mean test time: "+str(np.mean(testlist[i1]))+" / "+test(i2).name+" mean test time: "+str(np.mean(testlist[i2]))+"\n")
             else:
-                print("Statistically, no difference detected. But in this sample, "+test(i1).name+" is slightly better. "+test(i1).name+" mean accuracy: "+str(np.mean(testlist[i1]))+"\n")
+                print("Statistically, no difference detected. But in this sample, "+test(i1).name+" is slightly better.\n"+test(i1).name+" mean test time: "+str(np.mean(testlist[i1]))+"\n")
         else:
             compare_t = t.ppf(alpha,new_df)
             print("Comparable T-score: "+str(compare_t))
             if t_score>=compare_t:
-                print("Significantly, "+test(i2).name+" is better than "+test(i1).name+" / "+test(i1).name+" mean accuracy: "+str(np.mean(testlist[i1]))+" / "+test(i2).name+" mean accuracy: "+str(np.mean(testlist[i2]))+"\n")
+                print("Significantly, "+test(i2).name+" is better than "+test(i1).name+" / "+test(i1).name+" mean test time: "+str(np.mean(testlist[i1]))+" / "+test(i2).name+" mean test time: "+str(np.mean(testlist[i2]))+"\n")
             else:
-                print("Statistically, no difference detected. But in this sample, "+test(i2).name+" is slightly better. "+test(i2).name+" mean accuracy: "+str(np.mean(testlist[i2]))+"\n")
+                print("Statistically, no difference detected. But in this sample, "+test(i2).name+" is slightly better.\n"+test(i2).name+" mean test time: "+str(np.mean(testlist[i2]))+"\n")
 
