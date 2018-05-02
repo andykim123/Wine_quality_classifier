@@ -113,22 +113,29 @@ types = collections.OrderedDict((key, type(value[0]))
 
 # our code runs here:
 validate_cmdline_args(2,'Usage: python neuralNetwork.py <DATASET_PATH>')
-hidden_layers = []
+hidden_layers = [4, 4, 4, 4, 4]
 
-specify = raw_input("Would you like to specify network layers (y/n): ")
-if str(specify) == "y":
-	var = input("Number of hidden layers: ")
-	for i in range (0, int(var)):
-		nodes = input("Layer " + str(i+1) + " num nodes: ")
-		hidden_layers.append(nodes)
-else:
-	hidden_layers = [4, 4, 4, 4, 4]
+# delete header line:
+with open(sys.argv[1],'r') as f:
+    with open("dnn_"+sys.argv[1],'w') as f1:
+        f.next() # skip header line
+        for line in f:
+            f1.write(line)
 
-print("running DNN with hidden units " + str(hidden_layers) + " ...")
+# specify = raw_input("Would you like to specify network layers (y/n): ")
+# if str(specify) == "y":
+# 	var = input("Number of hidden layers: ")
+# 	for i in range (0, int(var)):
+# 		nodes = input("Layer " + str(i+1) + " num nodes: ")
+# 		hidden_layers.append(nodes)
+# else:
+# 	hidden_layers = [4, 4, 4, 4, 4]
+#
+# print("running DNN with hidden units " + str(hidden_layers) + " ...")
 
 
 						## Red Wine ##
-(train, test) = dataset(dataset_path=sys.argv[1])
+(train, test) = dataset(dataset_path="dnn_"+sys.argv[1])
 train = train.map(to_thousands)
 test = test.map(to_thousands)
 
