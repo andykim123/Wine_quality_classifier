@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import sys
 from sklearn import metrics
+from sklearn import preprocessing
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
 from sklearn import gaussian_process
@@ -25,7 +26,7 @@ def validate_cmdline_args(nargs, msg):
         sys.exit(1)
         
 # =============================================================================
-validate_cmdline_args(3,'Usage: python MultinomialLogRegression.py <RUN INFILE BOOLEAN> <DATASET_PATH>')
+validate_cmdline_args(3,'Usage: python GPeval.py <RUN INFILE BOOLEAN> <DATASET_PATH>')
 # run_infile_boolean is a boolean that checks whether a particular run is done within other python file or not
 # if it is true, it indicates that the run is done within other python file run. If false, it is done in command line.
 # When 3 arguments given: python GP.py <DATAPATH> <RUN INFILE BOOLEAN>, 
@@ -35,9 +36,9 @@ run_infile = False
 
 if len(sys.argv)==3:
     #DATASET_PATH = "/Users/dohoonkim/Desktop/cse517a/ApplicationProject/winequality-red.csv"
-    DATASET_PATH = sys.argv[1]
+    DATASET_PATH = sys.argv[2]
    
-    if(sys.argv[2]=="true" or sys.argv[2]=="True"):
+    if(sys.argv[1]=="true" or sys.argv[1]=="True"):
         run_infile = True
     if not run_infile:
         print("\nSplitting... '%s' into Training set and Test set...\n" % DATASET_PATH[DATASET_PATH.rfind("/")+1: ])
@@ -46,7 +47,8 @@ data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcoho
 if not run_infile:
     # =============================================================================
     # GP with RBF Kernel
-    #Kernel’s hyperparameters are optimized during fitting.    
+    #Kernel’s hyperparameters are optimized during fitting. 
+    DATASET_PATH = sys.argv[2]
     data1 = pd.read_csv(DATASET_PATH,names=data_features)
     train_x, test_x, train_y, test_y = train_test_split(data1[data_features[0:11]],data1["eval"], train_size=0.7)
     print("\nGP with RBF Kernel\n")
@@ -81,6 +83,10 @@ else:
     train_y = train["score"]
     test_x = test[data_features[0:7]]
     test_y = test["score"]
+    
+    #if the run in done within modelEvaluation.py, we just return cross_val_score result, which is a list of 10 different float-type accuracies
+    x_fit = preprocessing.StandardScaler().fit(data1[data_features[0:11]])
+    data_x = x_fit.transform(data1[data_features[0:11]])
     mul_gp = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_one').fit(train_x, train_y)
     cv = cross_val_score(mul_gp, data1[data_features[0:11]], data1["eval"], cv=10)
     print(cross_val_score(mul_gp, data1[data_features[0:11]], data1["eval"], cv=10))
