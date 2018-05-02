@@ -185,7 +185,7 @@ else:
   for i in range(1,len(temp_array_train)-1):
     TRAIN_PATH = TRAIN_PATH +"/"+temp_array_train[i]
 
-  if TRAIN_PATH~="":
+  if TRAIN_PATH!="":
     TRAIN_PATH = TRAIN_PATH + "/dnn_" + temp_array_train[len(temp_array_train)-1]
   else:
     TRAIN_PATH = "dnn_" + temp_array_train[len(temp_array_train)-1]
@@ -196,7 +196,7 @@ else:
   for i in range(1,len(temp_array_test)-1):
     TEST_PATH = TEST_PATH +"/"+temp_array_test[i]
 
-  if TEST_PATH~="":
+  if TEST_PATH!="":
     TEST_PATH = TEST_PATH + "/dnn_" + temp_array_test[len(temp_array_test)-1]
   else:
     TEST_PATH = "dnn_" + temp_array_test[len(temp_array_test)-1]
