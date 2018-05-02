@@ -22,13 +22,14 @@ run_infile = False
 if(sys.argv[1]=="true" or sys.argv[1]=="True"):
     run_infile = True
 
+data_features = ["f1","f2","f3","f4","f5","f6","f7","f8","score"]
+
 if not run_infile:
     if len(sys.argv)==3:
         n=10
     elif len(sys.argv)==4:
         n=int(sys.argv[3])
-
-    data_features = ["f1","f2","f3","f4","f5","f6","f7","f8","score"]
+    
     data = pd.read_csv(DATASET_PATH,names=data_features)
     clf = AdaBoostClassifier(n_estimators=n)
     train_x, test_x, train_y, test_y = train_test_split(data[data_features[:7]],data[data_features[8]], train_size=0.7)
@@ -49,13 +50,17 @@ if not run_infile:
     print('Adaboost Decision Tree Binary Classification Test Accuracy :: {}'.format(metrics.accuracy_score(test_y, clf_bin_fit.predict(test_x))))
     print('Binary CV-prediction error rate :: {}'.format(cross_val_score(clf, cv_x, cv_y, cv=10)))
 else:
-    n=10
+    n=20
     DATASET_PATH_TRAIN = sys.argv[2]
     DATASET_PATH_TEST = sys.argv[3]
     train = pd.read_csv(DATASET_PATH_TRAIN)
     test = pd.read_csv(DATASET_PATH_TEST)
-    train_x, dummy_x, train_y, dummy_y = train_test_split(train[data_features[:7]],train[data_features[8]], train_size=1)
-    test_x, dummy_x, test_y, dummy_y = train_test_split(test[data_features[:7]],test[data_features[8]], train_size=1)
+    train_x = train[data_features[0:7]]
+    train_y = train["score"]
+    test_x = test[data_features[0:7]]
+    test_y = test["score"]
+    # train_x, dummy_x, train_y, dummy_y = train_test_split(train[data_features[:7]],train[data_features[8]], train_size=1)
+    # test_x, dummy_x, test_y, dummy_y = train_test_split(test[data_features[:7]],test[data_features[8]], train_size=1)
     clf = AdaBoostClassifier(n_estimators=n)
     clf_mult_fit = clf.fit(train_x,train_y)
     print(metrics.accuracy_score(test_y, clf_mult_fit.predict(test_x)))

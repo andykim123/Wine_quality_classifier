@@ -45,7 +45,9 @@ else:
     DATASET_PATH_TEST = sys.argv[3]
     train = pd.read_csv(DATASET_PATH_TRAIN)
     test = pd.read_csv(DATASET_PATH_TEST)
-    train_x, dummy_x, train_y, dummy_y = train_test_split(train[data_features[:7]],train[data_features[8]], train_size=1)
-    test_x, dummy_x, test_y, dummy_y = train_test_split(test[data_features[:7]],test[data_features[8]], train_size=1)
+    train_x = train[data_features[0:7]]
+    train_y = train["score"]
+    test_x = test[data_features[0:7]]
+    test_y = test["score"]
     clf_mult_fit = clf.fit(train_x,train_y)
     print(metrics.accuracy_score(test_y, clf_mult_fit.predict(test_x)))

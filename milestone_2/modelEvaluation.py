@@ -29,6 +29,29 @@ def validate_data_name(dataname,msg):
 		print(msg)
 		sys.exit(1)
 
+def split(data_pca, RAW_PATH):
+    data_pca = data_pca.reindex(np.random.permutation(data_pca.index))
+    data_pca.to_csv(RAW_PATH+"/shuffled.csv",index=False)
+    data_pca = pd.read_csv(RAW_PATH+"/shuffled.csv")
+    for i in range(0,10):
+        """for last test set, we grab 159 data points"""
+        if i==9:
+            testdata = data_pca[160*i:1599]
+            excluded = list(range(160*i,1599))
+            bad_df = data_pca.index.isin(excluded)
+            newdata = data_pca[~bad_df]
+            traindata = newdata
+            testdata.to_csv(RAW_PATH+"/test_%d.csv"%i,index=False)
+            traindata.to_csv(RAW_PATH+"/train_%d.csv"%i,index=False)
+        else: #0~8 for other cases, 160 data points
+            testdata = data_pca[160*i:(i+1)*160]
+            excluded = list(range(160*i,(i+1)*160))
+            bad_df = data_pca.index.isin(excluded)
+            newdata = data_pca[~bad_df]
+            traindata = newdata        
+            testdata.to_csv(RAW_PATH+"/test_%d.csv"%i,index=False)
+            traindata.to_csv(RAW_PATH+"/train_%d.csv"%i,index=False)
+
 validate_cmdline_args(4,'Usage: python modelEvaluation.py <NAME OF MODEL_1 FILE> <NAME OF MODEL_2 FILE> <DATASET_PATH>')
 validate_file_names(sys.argv[1],sys.argv[2],"Invalid file name: "+sys.argv[1],"Invalid file name: "+sys.argv[2])
 validate_data_name(sys.argv[3],"Invalid data file name: "+sys.argv[3])
@@ -47,7 +70,7 @@ alpha = 0.05
 # list_2 = random.sample(xrange(100), 10)
 
 
-data = pd.read_csv(DATASET_PATH,names=data_features)
+data = pd.read_csv(DATASET_PATH)
 #to_csv("/Users/dohoonkim/Desktop/cse517a/ApplicationProject/PCAdata.csv", sep=',',index=False)
 
 temp_array = DATASET_PATH.split("/")
@@ -55,28 +78,6 @@ RAW_PATH = ""
 
 for i in range(1,len(temp_array)-1):
     RAW_PATH = RAW_PATH +"/"+temp_array[i]
-
-train_1.to_csv(RAW_PATH+"/train_1")
-train_2.to_csv(RAW_PATH+"/train_2")
-train_3.to_csv(RAW_PATH+"/train_3")
-train_4.to_csv(RAW_PATH+"/train_4")
-train_5.to_csv(RAW_PATH+"/train_5")
-train_6.to_csv(RAW_PATH+"/train_6")
-train_7.to_csv(RAW_PATH+"/train_7")
-train_8.to_csv(RAW_PATH+"/train_8")
-train_9.to_csv(RAW_PATH+"/train_9")
-train_10.to_csv(RAW_PATH+"/train_10")
-
-test_1.to_csv(RAW_PATH+"/test_1")
-test_2.to_csv(RAW_PATH+"/test_2")
-test_3.to_csv(RAW_PATH+"/test_3")
-test_4.to_csv(RAW_PATH+"/test_4")
-test_5.to_csv(RAW_PATH+"/test_5")
-test_6.to_csv(RAW_PATH+"/test_6")
-test_7.to_csv(RAW_PATH+"/test_7")
-test_8.to_csv(RAW_PATH+"/test_8")
-test_9.to_csv(RAW_PATH+"/test_9")
-test_10.to_csv(RAW_PATH+"/test_10")
 
 print("Files to be used:")
 print("Model 1: "+model_1)
@@ -86,17 +87,20 @@ print("Model Calculation Starts")
 # execute 10 different cross-validations
 for k in range(0,10):
     print("    "+str(k+1)+"th Run:")
+    split(data,RAW_PATH)
     # proc = subprocess.Popen(['python', model_1,  DATASET_PATH, "true"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     # print(proc.communicate()[0])
     # for each model, run a process and get the 10 cv results as a to_string format
     for j in range(0,10):
         print("        "+model_1+":")
-        proc1 = subprocess.check_output([sys.executable, model_1, RAW_PATH+"/train_"+str(k+1), RAW_PATH+"/test_"+str(k+1), "true"])
+        proc1 = subprocess.check_output([sys.executable, model_1, "true", RAW_PATH+"/train_"+str(j)+".csv", RAW_PATH+"/test_"+str(j)+".csv"])
         print("        "+model_2+":")
-        proc2 = subprocess.check_output([sys.executable, model_2, RAW_PATH+"/train_"+str(k+1), RAW_PATH+"/test_"+str(k+1), "true"])
+        proc2 = subprocess.check_output([sys.executable, model_2, "true", RAW_PATH+"/train_"+str(j)+".csv", RAW_PATH+"/test_"+str(j)+".csv"])
         # parse the to_string format into 10 different string values
         list_1.append(float(proc1))
         list_2.append(float(proc2))
+        print(proc1)
+        print(proc2)
 
 print("Model Calculation Ends")
 print("-----------------------")

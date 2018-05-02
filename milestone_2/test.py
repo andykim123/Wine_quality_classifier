@@ -56,9 +56,11 @@ var2 = DATASET_PATH
 var4 = var2.split("/")
 var5 = len(var4)
 
-print(var4[var5-1])
-print(var4)
-print(var2)
+print(len(data))
+
+data_wow = data[1:160]
+
+print(len(data_wow))
 
 result=""
 
