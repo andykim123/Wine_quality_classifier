@@ -179,20 +179,44 @@ if not run_infile:
   print(71 * "*" + "\n")
 
 else:
+  temp_array_train = sys.argv[2].split("/")
+  TRAIN_PATH = ""
+
+  for i in range(1,len(temp_array_train)-1):
+    TRAIN_PATH = TRAIN_PATH +"/"+temp_array_train[i]
+
+  if TRAIN_PATH~="":
+    TRAIN_PATH = TRAIN_PATH + "/dnn_" + temp_array_train[len(temp_array_train)-1]
+  else:
+    TRAIN_PATH = "dnn_" + temp_array_train[len(temp_array_train)-1]
+
+  temp_array_test = sys.argv[3].split("/")
+  TEST_PATH = ""
+
+  for i in range(1,len(temp_array_test)-1):
+    TEST_PATH = TEST_PATH +"/"+temp_array_test[i]
+
+  if TEST_PATH~="":
+    TEST_PATH = TEST_PATH + "/dnn_" + temp_array_test[len(temp_array_test)-1]
+  else:
+    TEST_PATH = "dnn_" + temp_array_test[len(temp_array_test)-1]
+
   # delete header line:
   with open(sys.argv[2],'r') as f:
-      with open("dnn_"+sys.argv[2],'w') as f1:
+      with open(TRAIN_PATH,'w') as f1:
           f.next() # skip header line
           for line in f:
               f1.write(line)
 
   with open(sys.argv[3],'r') as f:
-      with open("dnn_"+sys.argv[3],'w') as f1:
+      with open(TEST_PATH,'w') as f1:
           f.next() # skip header line
           for line in f:
               f1.write(line)
 
-  (train, test) = dataset_for_infile(train_path="dnn_"+sys.argv[2], test_path="dnn_"+sys.argv[3])
+  
+
+  (train, test) = dataset_for_infile(train_path=TRAIN_PATH, test_path=TEST_PATH)
 
   train = train.map(to_thousands)
   test = test.map(to_thousands)
@@ -203,7 +227,7 @@ else:
   original_values = []
   predict_values = []
 
-  data_temp = pd.read_csv("dnn_"+sys.argv[3])
+  data_temp = pd.read_csv(TEST_PATH)
 
   endDigit = len(data_temp)
 
