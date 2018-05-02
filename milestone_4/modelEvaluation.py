@@ -30,9 +30,11 @@ def validate_data_name(dataname,msg):
 		sys.exit(1)
 
 def split(data_pca, RAW_PATH):
+    if not RAW_PATH=="":
+        RAW_PATH = RAW_PATH + "/"
     data_pca = data_pca.reindex(np.random.permutation(data_pca.index))
-    data_pca.to_csv(RAW_PATH+"/shuffled.csv",index=False)
-    data_pca = pd.read_csv(RAW_PATH+"/shuffled.csv")
+    data_pca.to_csv(RAW_PATH+"shuffled.csv",index=False)
+    data_pca = pd.read_csv(RAW_PATH+"shuffled.csv")
     for i in range(0,10):
         """for last test set, we grab 159 data points"""
         if i==9:
@@ -41,16 +43,16 @@ def split(data_pca, RAW_PATH):
             bad_df = data_pca.index.isin(excluded)
             newdata = data_pca[~bad_df]
             traindata = newdata
-            testdata.to_csv(RAW_PATH+"/test_%d.csv"%i,index=False)
-            traindata.to_csv(RAW_PATH+"/train_%d.csv"%i,index=False)
+            testdata.to_csv(RAW_PATH+"test_%d.csv"%i,index=False)
+            traindata.to_csv(RAW_PATH+"train_%d.csv"%i,index=False)
         else: #0~8 for other cases, 160 data points
             testdata = data_pca[160*i:(i+1)*160]
             excluded = list(range(160*i,(i+1)*160))
             bad_df = data_pca.index.isin(excluded)
             newdata = data_pca[~bad_df]
             traindata = newdata        
-            testdata.to_csv(RAW_PATH+"/test_%d.csv"%i,index=False)
-            traindata.to_csv(RAW_PATH+"/train_%d.csv"%i,index=False)
+            testdata.to_csv(RAW_PATH+"test_%d.csv"%i,index=False)
+            traindata.to_csv(RAW_PATH+"train_%d.csv"%i,index=False)
 
 validate_cmdline_args(4,'Usage: python modelEvaluation.py <NAME OF MODEL_1 FILE> <NAME OF MODEL_2 FILE> <DATASET_PATH>')
 validate_file_names(sys.argv[1],sys.argv[2],"Invalid file name: "+sys.argv[1],"Invalid file name: "+sys.argv[2])
