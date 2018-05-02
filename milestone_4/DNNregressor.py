@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import numpy as np
 import tensorflow as tf
+from sklearn.model_selection import train_test_split
 
 import os
 import sys
@@ -47,6 +48,16 @@ def dataset(y_name="eval", train_fraction=0.7, dataset_path=""):
 
   return train, test
 
+def dataset_for_infile(y_name="eval", dataset_path=""):
+  path = dataset_path
+
+  def decode_line(line):
+    items = tf.decode_csv(line, list(defaults.values()))
+    pairs = zip(defaults.keys(), items)
+    features_dict = dict(pairs)
+    label = features_dict.pop(y_name)
+    return features_dict, label
+
 def input_train():
     return (train.shuffle(1000).batch(128).repeat()
 		.make_one_shot_iterator().get_next())
@@ -55,8 +66,22 @@ def input_test():
     return (test.shuffle(1000).batch(128)
 		.make_one_shot_iterator().get_next())
 
+def input_simple_train():
+    return train
+
+def input_simple_test():
+    return test
+
+def simple_split(dataset_path=""):
+  path = dataset_path
+  data = pd.read_csv(path)
+  train_x, test_x, train_y, test_y = train_test_split(data[data_features[:7]],data[data_features[8]], train_size=0.7)
+  return train_x, test_x, train_y, test_y
+
 def to_thousands(features, labels):
     return features, labels / 1000
+
+sess = tf.Session()
 
 defaults = collections.OrderedDict([
     ("f1", [0.0]),
@@ -86,6 +111,8 @@ types = collections.OrderedDict((key, type(value[0]))
 validate_cmdline_args(2,'Usage: python neuralNetwork.py <DATASET_PATH>')
 hidden_layers = [4, 4, 4, 4, 4]
 
+# data_features = ["f1","f2","f3","f4","f5","f6","f7","f8","score"]
+
 # delete header line:
 with open(sys.argv[1],'r') as f:
     with open("dnn_"+sys.argv[1],'w') as f1:
@@ -95,8 +122,24 @@ with open(sys.argv[1],'r') as f:
 
 						## Red Wine ##
 (train, test) = dataset(dataset_path="dnn_"+sys.argv[1])
+
 train = train.map(to_thousands)
 test = test.map(to_thousands)
+
+iterator = test.make_one_shot_iterator()
+next_element = iterator.get_next()
+
+original_values = []
+predict_values = []
+
+for i in range(0,461):
+  value = sess.run(next_element)
+  original_values.append(int(1000*value[1]))
+
+print(len(original_values))
+
+for i in range(0,len(original_values)):
+  print("No. "+str(i)+": "+str(original_values[i]))
 
 model = tf.estimator.DNNRegressor(hidden_units=hidden_layers, feature_columns=feature_columns, activation_fn=tf.nn.sigmoid)
 model.train(input_fn=input_train, steps=1000)
@@ -107,8 +150,16 @@ y = list(model.predict(input_fn=input_test))
 # for i in range(0,len(y)):
 #   print(y[i].get("predictions")[0])
 
-print(len(y))
+for i in range(0,len(y)):
+  predict_values.append(int(round(1000*y[i].get("predictions")[0])))
 
+prediction_accuracy = 0
+
+for i in range(0,len(original_values)):
+  if original_values[i]==predict_values[i]:
+    prediction_accuracy = prediction_accuracy + 1
+
+print("Prediction Accuracy: "+str(prediction_accuracy/len(original_values)))
 
 print("\n" + 30 * "*" + "DNN RESULTS" + 30 * "*")
 print("loss: "+str(eval_result["loss"]))
