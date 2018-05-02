@@ -143,6 +143,8 @@ model = tf.estimator.DNNRegressor(hidden_units=hidden_layers, feature_columns=fe
 model.train(input_fn=input_train, steps=1000)
 eval_result = model.evaluate(input_fn=input_test)
 
+print(eval_result)
+
 print("\n" + 30 * "*" + "DNN RESULTS" + 30 * "*")
 print("loss: "+str(eval_result["loss"]))
 print("average loss: "+str(eval_result["average_loss"]))
