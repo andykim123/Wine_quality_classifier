@@ -95,9 +95,9 @@ for k in range(0,10):
     # for each model, run a process and get the 10 cv results as a to_string format
     for j in range(0,10):
         print("        "+model_1+":")
-        proc1 = subprocess.check_output([sys.executable, model_1, "true", RAW_PATH+"/train_"+str(j)+".csv", RAW_PATH+"/test_"+str(j)+".csv"])
+        proc1 = subprocess.check_output([sys.executable, model_1, "true", RAW_PATH+"train_"+str(j)+".csv", RAW_PATH+"test_"+str(j)+".csv"])
         print("        "+model_2+":")
-        proc2 = subprocess.check_output([sys.executable, model_2, "true", RAW_PATH+"/train_"+str(j)+".csv", RAW_PATH+"/test_"+str(j)+".csv"])
+        proc2 = subprocess.check_output([sys.executable, model_2, "true", RAW_PATH+"train_"+str(j)+".csv", RAW_PATH+"test_"+str(j)+".csv"])
         # parse the to_string format into 10 different string values
         list_1.append(float(proc1))
         list_2.append(float(proc2))

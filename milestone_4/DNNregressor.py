@@ -142,8 +142,14 @@ test = test.map(to_thousands)
 model = tf.estimator.DNNRegressor(hidden_units=hidden_layers, feature_columns=feature_columns, activation_fn=tf.nn.sigmoid)
 model.train(input_fn=input_train, steps=1000)
 eval_result = model.evaluate(input_fn=input_test)
+# model_predict = model.predict(input_fn=input_test)
 
-print(eval_result)
+y = list(model.predict(input_fn=input_test))
+# for i in range(0,len(y)):
+#   print(y[i].get("predictions")[0])
+
+print(len(y))
+
 
 print("\n" + 30 * "*" + "DNN RESULTS" + 30 * "*")
 print("loss: "+str(eval_result["loss"]))
