@@ -15,8 +15,6 @@ def validate_cmdline_args(nargs, msg):
         sys.exit(1)
 validate_cmdline_args(3,'Usage: python adaBoost.py <RUN INFILE BOOLEAN> <DATASET_PATH> n_estimator')
 
-
-
 run_infile = False
 
 if(sys.argv[1]=="true" or sys.argv[1]=="True"):
@@ -29,7 +27,7 @@ if not run_infile:
         n=10
     elif len(sys.argv)==4:
         n=int(sys.argv[3])
-    
+
     data = pd.read_csv(DATASET_PATH,names=data_features)
     clf = AdaBoostClassifier(n_estimators=n)
     train_x, test_x, train_y, test_y = train_test_split(data[data_features[:7]],data[data_features[8]], train_size=0.7)
