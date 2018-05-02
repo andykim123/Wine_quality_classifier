@@ -29,7 +29,7 @@ if not run_infile:
         n=10
     elif len(sys.argv)==4:
         n=int(sys.argv[3])
-    
+    DATASET_PATH = sys.argv[2]
     data = pd.read_csv(DATASET_PATH,names=data_features)
     clf = AdaBoostClassifier(n_estimators=n)
     train_x, test_x, train_y, test_y = train_test_split(data[data_features[:7]],data[data_features[8]], train_size=0.7)
