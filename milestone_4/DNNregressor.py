@@ -48,8 +48,9 @@ def dataset(y_name="eval", train_fraction=0.7, dataset_path=""):
 
   return train, test
 
-def dataset_for_infile(y_name="eval", dataset_path=""):
-  path = dataset_path
+def dataset_for_infile(y_name="eval", train_path="", test_path=""):
+  tr_path = train_path
+  te_path = test_path
 
   def decode_line(line):
     items = tf.decode_csv(line, list(defaults.values()))
@@ -57,6 +58,13 @@ def dataset_for_infile(y_name="eval", dataset_path=""):
     features_dict = dict(pairs)
     label = features_dict.pop(y_name)
     return features_dict, label
+
+  train = (tf.data.TextLineDataset(tr_path)).map(decode_line).cache()
+  test = (tf.data.TextLineDataset(te_path)).cache().map(decode_line)
+  # train = (train_base_dataset.filter(True).map(decode_line).cache())
+  # test = (test_base_dataset.filter(True).cache().map(decode_line))
+
+  return train, test
 
 def input_train():
     return (train.shuffle(1000).batch(128).repeat()
@@ -107,64 +115,115 @@ feature_columns = [tf.feature_column.numeric_column(key="f1"),
 types = collections.OrderedDict((key, type(value[0]))
                                 for key, value in defaults.items())
 
+run_infile = False
+
+if(sys.argv[1]=="true" or sys.argv[1]=="True"):
+    run_infile = True
+
 # our code runs here:
-validate_cmdline_args(2,'Usage: python neuralNetwork.py <DATASET_PATH>')
+validate_cmdline_args(2,'Usage: python neuralNetwork.py <RUN INFILE BOOLEAN> <DATASET_PATH>')
 hidden_layers = [4, 4, 4, 4, 4]
 
-# data_features = ["f1","f2","f3","f4","f5","f6","f7","f8","score"]
+if not run_infile:
+  # delete header line:
+  with open(sys.argv[2],'r') as f:
+      with open("dnn_"+sys.argv[2],'w') as f1:
+          f.next() # skip header line
+          for line in f:
+              f1.write(line)
 
-# delete header line:
-with open(sys.argv[1],'r') as f:
-    with open("dnn_"+sys.argv[1],'w') as f1:
-        f.next() # skip header line
-        for line in f:
-            f1.write(line)
+  (train, test) = dataset(dataset_path="dnn_"+sys.argv[2])
 
-						## Red Wine ##
-(train, test) = dataset(dataset_path="dnn_"+sys.argv[1])
+  train = train.map(to_thousands)
+  test = test.map(to_thousands)
 
-train = train.map(to_thousands)
-test = test.map(to_thousands)
+  iterator = test.make_one_shot_iterator()
+  next_element = iterator.get_next()
 
-iterator = test.make_one_shot_iterator()
-next_element = iterator.get_next()
+  original_values = []
+  predict_values = []
 
-original_values = []
-predict_values = []
+  for i in range(0,461):
+    value = sess.run(next_element)
+    original_values.append(int(1000*value[1]))
 
-for i in range(0,461):
-  value = sess.run(next_element)
-  original_values.append(int(1000*value[1]))
+  print(len(original_values))
 
-print(len(original_values))
+  for i in range(0,len(original_values)):
+    print("No. "+str(i)+": "+str(original_values[i]))
 
-for i in range(0,len(original_values)):
-  print("No. "+str(i)+": "+str(original_values[i]))
+  model = tf.estimator.DNNRegressor(hidden_units=hidden_layers, feature_columns=feature_columns, activation_fn=tf.nn.sigmoid)
+  model.train(input_fn=input_train, steps=1000)
+  eval_result = model.evaluate(input_fn=input_test)
+  # model_predict = model.predict(input_fn=input_test)
 
-model = tf.estimator.DNNRegressor(hidden_units=hidden_layers, feature_columns=feature_columns, activation_fn=tf.nn.sigmoid)
-model.train(input_fn=input_train, steps=1000)
-eval_result = model.evaluate(input_fn=input_test)
-# model_predict = model.predict(input_fn=input_test)
+  y = list(model.predict(input_fn=input_test))
+  # for i in range(0,len(y)):
+  #   print(y[i].get("predictions")[0])
 
-y = list(model.predict(input_fn=input_test))
-# for i in range(0,len(y)):
-#   print(y[i].get("predictions")[0])
+  for i in range(0,len(y)):
+    predict_values.append(int(round(1000*y[i].get("predictions")[0])))
 
-for i in range(0,len(y)):
-  predict_values.append(int(round(1000*y[i].get("predictions")[0])))
+  prediction_accuracy = 0
 
-prediction_accuracy = 0
+  for i in range(0,len(original_values)):
+    if original_values[i]==predict_values[i]:
+      prediction_accuracy = prediction_accuracy + 1
 
-for i in range(0,len(original_values)):
-  if original_values[i]==predict_values[i]:
-    prediction_accuracy = prediction_accuracy + 1
+  print("\n" + 30 * "*" + "DNN RESULTS" + 30 * "*")
+  print("Prediction Accuracy: "+str(prediction_accuracy/len(original_values)))
+  print("loss: "+str(eval_result["loss"]))
+  print("average loss: "+str(eval_result["average_loss"]))
+  # Convert MSE to Root Mean Square Error (RMSE).
+  print("RMS error for the test set: {:.0f}".format(1000 * eval_result["average_loss"]**0.5))
+  print(71 * "*" + "\n")
 
-print("Prediction Accuracy: "+str(prediction_accuracy/len(original_values)))
+else:
+  # delete header line:
+  with open(sys.argv[2],'r') as f:
+      with open("dnn_"+sys.argv[2],'w') as f1:
+          f.next() # skip header line
+          for line in f:
+              f1.write(line)
 
-print("\n" + 30 * "*" + "DNN RESULTS" + 30 * "*")
-print("loss: "+str(eval_result["loss"]))
-print("average loss: "+str(eval_result["average_loss"]))
-# Convert MSE to Root Mean Square Error (RMSE).
-print("RMS error for the test set: {:.0f}".format(1000 * eval_result["average_loss"]**0.5))
+  with open(sys.argv[3],'r') as f:
+      with open("dnn_"+sys.argv[3],'w') as f1:
+          f.next() # skip header line
+          for line in f:
+              f1.write(line)
 
-print(71 * "*" + "\n")
+  (train, test) = dataset_for_infile(train_path="dnn_"+sys.argv[2], test_path="dnn_"+sys.argv[3])
+
+  train = train.map(to_thousands)
+  test = test.map(to_thousands)
+
+  iterator = test.make_one_shot_iterator()
+  next_element = iterator.get_next()
+
+  original_values = []
+  predict_values = []
+
+  data_temp = pd.read_csv("dnn_"+sys.argv[3])
+
+  endDigit = len(data_temp)
+
+  for i in range(0,endDigit):
+    value = sess.run(next_element)
+    original_values.append(int(1000*value[1]))
+
+  model = tf.estimator.DNNRegressor(hidden_units=hidden_layers, feature_columns=feature_columns, activation_fn=tf.nn.sigmoid)
+  model.train(input_fn=input_train, steps=1000)
+  y = list(model.predict(input_fn=input_test))
+  # for i in range(0,len(y)):
+  #   print(y[i].get("predictions")[0])
+
+  for i in range(0,len(y)):
+    predict_values.append(int(round(1000*y[i].get("predictions")[0])))
+
+  prediction_accuracy = 0
+
+  for i in range(0,len(original_values)):
+    if original_values[i]==predict_values[i]:
+      prediction_accuracy = prediction_accuracy + 1
+
+  print(prediction_accuracy/len(original_values))
