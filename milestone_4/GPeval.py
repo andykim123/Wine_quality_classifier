@@ -33,22 +33,23 @@ validate_cmdline_args(3,'Usage: python GPeval.py <RUN INFILE BOOLEAN> <DATASET_P
 # it will split the data into train:test=7:3
 
 run_infile = False
+if(sys.argv[1]=="true" or sys.argv[1]=="True"):
+    run_infile = True
+#if len(sys.argv)==3:
+#    #DATASET_PATH = "/Users/dohoonkim/Desktop/cse517a/ApplicationProject/winequality-red.csv"
+#    DATASET_PATH = sys.argv[2]
+#   
+#    if(sys.argv[1]=="true" or sys.argv[1]=="True"):
+#        run_infile = True
+#    if not run_infile:
+#        print("\nSplitting... '%s' into Training set and Test set...\n" % DATASET_PATH[DATASET_PATH.rfind("/")+1: ])
 
-if len(sys.argv)==3:
-    #DATASET_PATH = "/Users/dohoonkim/Desktop/cse517a/ApplicationProject/winequality-red.csv"
-    DATASET_PATH = sys.argv[2]
-   
-    if(sys.argv[1]=="true" or sys.argv[1]=="True"):
-        run_infile = True
-    if not run_infile:
-        print("\nSplitting... '%s' into Training set and Test set...\n" % DATASET_PATH[DATASET_PATH.rfind("/")+1: ])
-
-data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"] #12
 if not run_infile:
     # =============================================================================
     # GP with RBF Kernel
     #Kernel’s hyperparameters are optimized during fitting. 
     DATASET_PATH = sys.argv[2]
+    data_features = ["fa","va","ca","rs","ch","fsd","tsd","dens","pH","sulp","alcohol","eval"] #12
     data1 = pd.read_csv(DATASET_PATH,names=data_features)
     train_x, test_x, train_y, test_y = train_test_split(data1[data_features[0:11]],data1["eval"], train_size=0.7)
     print("\nGP with RBF Kernel\n")
@@ -77,6 +78,8 @@ else:
     #if the run in done within modelEvaluation.py, we just return cross_val_score result, which is a list of 10 different float-type accuracies
     DATASET_PATH_TRAIN = sys.argv[2]
     DATASET_PATH_TEST = sys.argv[3]
+    data_features = ["f1","f2","f3","f4","f5","f6","f7","f8","score"]
+
     train = pd.read_csv(DATASET_PATH_TRAIN)
     test = pd.read_csv(DATASET_PATH_TEST)
     train_x = train[data_features[0:7]]
@@ -85,9 +88,6 @@ else:
     test_y = test["score"]
     
     #if the run in done within modelEvaluation.py, we just return cross_val_score result, which is a list of 10 different float-type accuracies
-    x_fit = preprocessing.StandardScaler().fit(data1[data_features[0:11]])
-    data_x = x_fit.transform(data1[data_features[0:11]])
     mul_gp = gaussian_process.GaussianProcessClassifier(multi_class='one_vs_one').fit(train_x, train_y)
-    cv = cross_val_score(mul_gp, data1[data_features[0:11]], data1["eval"], cv=10)
-    print(cross_val_score(mul_gp, data1[data_features[0:11]], data1["eval"], cv=10))
-    print("Accuracy(Mean CV): %0.2f (+/- %0.2f)" % (cv.mean(), cv.std() * 2))
+#    print(cross_val_score(mul_gp, data1[data_features[0:11]], data1["eval"], cv=10))
+    print(metrics.accuracy_score(test_y, mul_gp.predict(test_x)))
