@@ -23,6 +23,8 @@ if(sys.argv[1]=="true" or sys.argv[1]=="True"):
 data_features = ["f1","f2","f3","f4","f5","f6","f7","f8","score"]
 
 if not run_infile:
+    DATASET_PATH = sys.argv[2]
+    data = pd.read_csv(DATASET_PATH)
     train_x, test_x, train_y, test_y = train_test_split(data[data_features[:7]],data[data_features[8]], train_size=0.7)
     clf_mult_fit = clf.fit(train_x,train_y)
     print('Decision Tree Multinomial Classification Train Accuracy :: {}'.format(metrics.accuracy_score(train_y, clf_mult_fit.predict(train_x))))
